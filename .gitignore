@@ -24,6 +24,9 @@ ENV/
 # Jupyter
 .ipynb_checkpoints/
 
+# Material not used in the manuscript (kept locally only, not versioned)
+_descartado/
+
 # --- Heavy artifacts: never commit ---
 # Model weights
 *.pt

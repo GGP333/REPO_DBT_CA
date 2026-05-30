@@ -351,6 +351,7 @@ Paper_DBT/
 |   |
 |   |-- run_test_trainings.py         # Orchestrator (in-house models)
 |   |-- generate_samples_and_summary.py  # Sample and summary generation
+|   |-- plot_training_curves.py       # Training-loss figure (all 3 models, per dataset)
 |
 |-- experiments/
 |   |-- nnunet_official/              # Official nnU-Netv2 pipeline (the manuscript's "nnU-Net")
@@ -362,6 +363,7 @@ Paper_DBT/
 |-- results/
 |   |-- outputs_clean/                # UNet_BCE leakage-free re-trains (Large/Small/Both)
 |   |-- outputs_improved/             # Attention_UNet (4 datasets) + UNet_BCE Both_RealWorld
+|   |-- figures/                      # training_curves_<dataset>.png (per-dataset loss curves)
 |
 |-- docs/
 |   |-- data_leakage_audit.md         # Leakage audit and resolution
@@ -378,8 +380,9 @@ Paper_DBT/
 ```
 1. Obtain data         -> data/raw/
 2. Preprocess          -> python src/preprocessing/preprocess_simple.py
-3. Train models        -> python src/run_test_trainings.py
-4. Evaluate results    -> results/logs/
+3. Train models        -> in-house: src/run_test_trainings.py
+                          nnU-Net:  experiments/nnunet_official/scripts/run_pipeline.sh
+4. Inspect results     -> results/outputs_clean/, results/outputs_improved/, results/figures/
 ```
 
 ### 7.2 Files excluded from the repository
@@ -462,6 +465,18 @@ bash experiments/nnunet_official/scripts/run_pipeline.sh
 ```bash
 python src/generate_samples_and_summary.py
 ```
+
+Training-loss curves (one figure per dataset, three panels: 3D U-Net / nnU-Net / Attention
+U-Net) are written to `results/figures/`:
+
+```bash
+python src/plot_training_curves.py --datasets large_tumor small_tumor Both Both_RealWorld
+```
+
+Curve sources match the reported runs: the official **nnU-Net** loss is read from its
+nnU-Netv2 `training_log_*.txt` (compound DC+CE loss, can be negative; 1000 epochs by default —
+the Large run's persisted log resumes at epoch 350), while the 3D U-Net baseline and Attention
+U-Net read `train_loss` from their `logs/metrics.csv` (500 epochs).
 
 ---
 
