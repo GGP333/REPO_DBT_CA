@@ -1,0 +1,94 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# PyTorch
+*.pt
+*.pth
+*.ckpt
+
+# Data directories (large files)
+Dataset/
+Dataset_Preprocessed/
+data/raw/*
+data/preprocessed/*
+!data/raw/.gitkeep
+!data/preprocessed/.gitkeep
+!data/raw/README.md
+!data/preprocessed/README.md
+
+# Output directories (reproducible results)
+outputs_improved/
+Experimento_Cristina_Alfaro_Enviar/
+Experimento_Cristina_Alfaro_Enviar.zip
+results/checkpoints/*.pt
+results/checkpoints/*.pth
+results/predictions/*.npy
+results/logs/*.png
+results/logs/*.pdf
+
+# Keep structure files
+!results/checkpoints/.gitkeep
+!results/predictions/.gitkeep
+!results/logs/.gitkeep
+
+# Temporary files
+*.log
+*.tmp
+*.npy
+*.npz
+*.tif
+*.tiff
+*.png
+*.jpg
+*.jpeg
+
+# System files
+.cache/
+*.pid
+.cursor/
+
+# Allow specific important files
+!docs/**/*.png
+!docs/**/*.jpg
+!README.md

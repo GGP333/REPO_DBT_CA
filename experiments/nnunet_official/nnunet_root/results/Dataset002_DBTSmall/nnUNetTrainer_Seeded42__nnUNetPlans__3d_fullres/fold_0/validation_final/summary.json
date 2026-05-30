@@ -1,0 +1,106 @@
+{
+    "foreground_mean": {
+        "Dice": 0.7069931286432057,
+        "FN": 485.8,
+        "FP": 300.0,
+        "IoU": 0.5862990402310546,
+        "TN": 1962772.2,
+        "TP": 2522.0,
+        "n_pred": 2822.0,
+        "n_ref": 3007.8
+    },
+    "mean": {
+        "1": {
+            "Dice": 0.7069931286432057,
+            "FN": 485.8,
+            "FP": 300.0,
+            "IoU": 0.5862990402310546,
+            "TN": 1962772.2,
+            "TP": 2522.0,
+            "n_pred": 2822.0,
+            "n_ref": 3007.8
+        }
+    },
+    "metric_per_case": [
+        {
+            "metrics": {
+                "1": {
+                    "Dice": 0.5364431486880467,
+                    "FN": 316,
+                    "FP": 2,
+                    "IoU": 0.3665338645418327,
+                    "TN": 1965578,
+                    "TP": 184,
+                    "n_pred": 186,
+                    "n_ref": 500
+                }
+            },
+            "prediction_file": "/home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/results/Dataset002_DBTSmall/nnUNetTrainer_Seeded42__nnUNetPlans__3d_fullres/fold_0/validation/dbt_005.nii.gz",
+            "reference_file": "/home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/preprocessed/Dataset002_DBTSmall/gt_segmentations/dbt_005.nii.gz"
+        },
+        {
+            "metrics": {
+                "1": {
+                    "Dice": 0.8885786093270036,
+                    "FN": 263,
+                    "FP": 136,
+                    "IoU": 0.799497487437186,
+                    "TN": 1964090,
+                    "TP": 1591,
+                    "n_pred": 1727,
+                    "n_ref": 1854
+                }
+            },
+            "prediction_file": "/home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/results/Dataset002_DBTSmall/nnUNetTrainer_Seeded42__nnUNetPlans__3d_fullres/fold_0/validation/dbt_008.nii.gz",
+            "reference_file": "/home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/preprocessed/Dataset002_DBTSmall/gt_segmentations/dbt_008.nii.gz"
+        },
+        {
+            "metrics": {
+                "1": {
+                    "Dice": 0.8395316804407713,
+                    "FN": 314,
+                    "FP": 152,
+                    "IoU": 0.7234421364985163,
+                    "TN": 1964395,
+                    "TP": 1219,
+                    "n_pred": 1371,
+                    "n_ref": 1533
+                }
+            },
+            "prediction_file": "/home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/results/Dataset002_DBTSmall/nnUNetTrainer_Seeded42__nnUNetPlans__3d_fullres/fold_0/validation/dbt_009.nii.gz",
+            "reference_file": "/home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/preprocessed/Dataset002_DBTSmall/gt_segmentations/dbt_009.nii.gz"
+        },
+        {
+            "metrics": {
+                "1": {
+                    "Dice": 0.8961168270826418,
+                    "FN": 1015,
+                    "FP": 1176,
+                    "IoU": 0.8117859290438966,
+                    "TN": 1954439,
+                    "TP": 9450,
+                    "n_pred": 10626,
+                    "n_ref": 10465
+                }
+            },
+            "prediction_file": "/home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/results/Dataset002_DBTSmall/nnUNetTrainer_Seeded42__nnUNetPlans__3d_fullres/fold_0/validation/dbt_024.nii.gz",
+            "reference_file": "/home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/preprocessed/Dataset002_DBTSmall/gt_segmentations/dbt_024.nii.gz"
+        },
+        {
+            "metrics": {
+                "1": {
+                    "Dice": 0.3742953776775648,
+                    "FN": 521,
+                    "FP": 34,
+                    "IoU": 0.2302357836338419,
+                    "TN": 1965359,
+                    "TP": 166,
+                    "n_pred": 200,
+                    "n_ref": 687
+                }
+            },
+            "prediction_file": "/home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/results/Dataset002_DBTSmall/nnUNetTrainer_Seeded42__nnUNetPlans__3d_fullres/fold_0/validation/dbt_025.nii.gz",
+            "reference_file": "/home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/preprocessed/Dataset002_DBTSmall/gt_segmentations/dbt_025.nii.gz"
+        }
+    ]
+}

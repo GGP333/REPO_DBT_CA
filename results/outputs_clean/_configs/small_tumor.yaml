@@ -1,0 +1,33 @@
+# configs/config.yaml
+# Edit dataset_root to point to your preprocessed dataset
+dataset_root: "Dataset_Preprocessed/Dataset_small_tumor"
+
+seed: 42
+val_ratio: 0.2
+
+batch_size: 1
+num_workers: 0  # Reduced to avoid OOM with large datasets
+
+max_epochs: 500
+lr: 0.001
+weight_decay: 0.00001
+amp: true
+threshold: 0.5
+save_top_k: 1
+loss: bce
+
+# Scheduler
+scheduler: poly
+warmup_epochs: 5
+
+# Data
+foreground_oversample: 0.5
+augmentation: true
+
+# Early Stopping
+early_stopping: false
+early_stop_patience: 50
+early_stop_min_delta: 0.001
+
+# Traceability
+save_samples: 5
