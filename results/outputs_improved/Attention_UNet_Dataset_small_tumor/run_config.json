@@ -1,0 +1,100 @@
+{
+  "timestamp": "2026-02-07T10:27:21.618444",
+  "system": {
+    "hostname": "LabIHealth",
+    "os": "Linux 6.17.9-arch1-1",
+    "python": "3.12.8",
+    "pytorch": "2.5.1+cu124",
+    "cuda_available": true,
+    "gpu_name": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "gpu_count": 1,
+    "cuda_version": "12.4"
+  },
+  "hyperparameters": {
+    "dataset_root": "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/Dataset_Preprocessed/Dataset_small_tumor",
+    "seed": 42,
+    "val_ratio": 0.2,
+    "batch_size": 1,
+    "num_workers": 0,
+    "max_epochs": 500,
+    "lr": 0.001,
+    "weight_decay": 1e-05,
+    "amp": true,
+    "threshold": 0.5,
+    "save_top_k": 1,
+    "loss": "dice_ce",
+    "scheduler": "poly",
+    "warmup_epochs": 5,
+    "foreground_oversample": 0.5,
+    "augmentation": true,
+    "early_stopping": false,
+    "early_stop_patience": 50,
+    "early_stop_min_delta": 0.001,
+    "save_samples": 5
+  },
+  "model": {
+    "class": "AttentionUNet3D",
+    "total_params": 35574729,
+    "trainable_params": 35574729,
+    "total_params_M": 35.575
+  },
+  "dataset": {
+    "train": {
+      "n_studies": 22,
+      "study_ids": [
+        "dbt_003",
+        "dbt_023",
+        "dbt_019",
+        "dbt_017",
+        "dbt_020",
+        "dbt_026",
+        "dbt_011",
+        "dbt_028",
+        "dbt_007",
+        "dbt_006",
+        "dbt_027",
+        "dbt_012",
+        "dbt_014",
+        "dbt_030",
+        "dbt_002",
+        "dbt_018",
+        "dbt_010",
+        "dbt_013",
+        "dbt_022",
+        "dbt_015",
+        "dbt_016",
+        "dbt_029"
+      ],
+      "fg_ratio_mean_pct": 0.22121776234019883,
+      "fg_ratio_median_pct": 0.18826802571614581,
+      "n_with_foreground": 22,
+      "n_without_foreground": 0
+    },
+    "val": {
+      "n_studies": 5,
+      "study_ids": [
+        "dbt_005",
+        "dbt_008",
+        "dbt_009",
+        "dbt_024",
+        "dbt_025"
+      ],
+      "fg_ratio_mean_pct": 0.152984619140625,
+      "fg_ratio_median_pct": 0.077972412109375,
+      "n_with_foreground": 5,
+      "n_without_foreground": 0
+    },
+    "test": {
+      "n_studies": 3,
+      "study_ids": [
+        "dbt_001",
+        "dbt_021",
+        "dbt_004"
+      ],
+      "fg_ratio_mean_pct": 0.13348049587673613,
+      "fg_ratio_median_pct": 0.15696207682291666,
+      "n_with_foreground": 3,
+      "n_without_foreground": 0
+    }
+  }
+}

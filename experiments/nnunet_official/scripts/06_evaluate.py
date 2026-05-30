@@ -2,8 +2,8 @@
 Evaluate nnUNetv2 predictions on the held-out test set with the same 12
 metrics the repo uses for the rest of the experiments.
 
-Reuses `src/models/nnunet/src/metrics.py::compute_metrics` so the numbers are
-1:1 comparable to the repo's reported results.
+Reuses `compute_metrics` (co-located `metrics.py` in this scripts dir) so the
+numbers are 1:1 comparable to the repo's reported results.
 """
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ import SimpleITK as sitk
 import torch
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO_ROOT / "src" / "models" / "nnunet" / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from metrics import compute_metrics  # noqa: E402
 
 

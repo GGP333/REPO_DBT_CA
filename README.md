@@ -6,8 +6,11 @@ This project implements and compares three 3D convolutional neural network archi
 
 ### Main contributions
 
-- Systematic comparison of 3 architectures (auto-configured nnUNet 3D, Attention U-Net 3D, U-Net BCE) across 4 data configurations.
-- Implementation of an auto-configuration pipeline inspired by nnU-Net (Isensee et al.): dataset fingerprint, automatic architecture planning with anisotropic pooling, patch-based training with foreground oversampling, sliding window inference with Gaussian weighting, and connected-components post-processing.
+- Systematic comparison of 3 architectures across 4 data configurations: **nnU-Net** (official
+  nnU-Netv2), **3D U-Net (baseline)** (U-Net BCE), and **Attention U-Net 3D**.
+- Use of the official **nnU-Netv2** framework (Isensee et al.) as the auto-configuring
+  reference model — dataset fingerprint, automatic architecture planning, patch-based training,
+  sliding window inference. The official pipeline lives in `experiments/nnunet_official/`.
 - Evaluation with 12 segmentation metrics including Hausdorff Distance 95 (HD95), Average Precision (AP), and False Positives per volume.
 - Complete pipeline from TIFF preprocessing to quantitative evaluation and prediction visualization.
 - 500-epoch training with guaranteed reproducibility (seed=42).
@@ -68,7 +71,9 @@ Four datasets are defined from the preprocessed set:
 - **Study-level split**: partitioning is done at the study level (not by slice), preventing data leakage.
 - **General case (without `real_dbt_*`)**: uses the configured train/val/test proportions over the total dataset.
 - **Special case with real data (`real_dbt_*`)**: 50% of the `real_dbt_*` studies are assigned exclusively to the **test** set. The remaining 50% is mixed with the `dbt_*` to form train/val. This way the model trains with real and synthetic data and is evaluated only on unseen real clinical data.
-- This logic is implemented in `src/models/nnunet/train_unet_dbt.py`, `src/models/attention_unet/train_unet_dbt.py`, and `src/models/unet_bce/src/dataset_dbt.py`.
+- This logic is implemented in `src/models/attention_unet/train_unet_dbt.py` and
+  `src/models/unet_bce/src/dataset_dbt.py`. The official nnU-Net reproduces the same split via
+  `experiments/nnunet_official/scripts/02_make_splits.py` (see `splits_final.json`).
 
 ---
 
@@ -76,68 +81,28 @@ Four datasets are defined from the preprocessed set:
 
 Three 3D U-Net variants are compared for volumetric segmentation. Conceptually, all three share the encoder-decoder pattern with skip connections, but differ in how they model context, how they fuse multi-scale information, how they adapt to the data geometry, and which optimization objective they prioritize.
 
-### 3.1 Auto-configured 3D nnUNet (`src/models/nnunet`)
+### 3.1 nnU-Net (official nnU-Netv2)
 
-**Parameters**: variable (auto-computed by the planner)
+**Reference auto-configuring model.** The manuscript uses the official **nnU-Netv2** framework
+by Isensee et al. (Nature Methods 2021) as the strong, self-configuring baseline. nnU-Netv2
+analyses the dataset (fingerprint), automatically plans the 3D full-resolution architecture
+(patch size, anisotropic pooling adapted to the DBT Z/H/W geometry, channel widths and batch
+size), trains with patch-based foreground oversampling, and runs sliding-window inference with
+Gaussian weighting.
 
-Implementation that follows the core philosophy of nnU-Net by Isensee et al. (1809.10486): the architecture is **not fixed**, but **auto-configures** itself based on an automatic analysis of the dataset properties. The auto-configuration pipeline consists of three stages:
+The complete, reproducible pipeline (NIfTI conversion, splits, custom seeded trainer, training
+and evaluation) is in **`experiments/nnunet_official/`**:
 
-#### 3.1.1 Dataset Fingerprint (`src/fingerprint.py`)
+- `scripts/` — `01_convert_to_nifti.py`, `02_make_splits.py`, `06_evaluate.py`, and the custom
+  trainer `nnUNetTrainer_Seeded42` (fixed seed = 42).
+- `nnunet_root/` — `dataset.json`, plans, `splits_final.json`, fingerprints and the
+  `validation_best` / `validation_final` summaries per dataset.
+- `eval/results_Dataset00*__nnUNetTrainer_Seeded42.json` — test metrics, computed with the same
+  `compute_metrics` used for the other models so the numbers are 1:1 comparable.
 
-Before training, all volumes in the dataset are scanned and statistics are extracted:
-- **Median, minimum, and maximum shape** `(Z, H, W)` across all studies.
-- **Median foreground/background ratio** (percentage of voxels that are tumor).
-- **Intensity statistics** (mean, std, global percentiles).
-- **Spacing** (parameterizable; default `(1, 1, 1)` for already-resampled data).
-
-The fingerprint is saved as `fingerprint.json` in the output directory.
-
-#### 3.1.2 Architecture Planner (`src/planner.py`)
-
-Receives the fingerprint and the available GPU VRAM, and automatically computes:
-
-- **Patch size**: based on the dataset's median shape, adjusted to fit in GPU. Each dimension is rounded to a multiple of `2^(n_pools_in_that_axis)`.
-- **Anisotropic strides per level**: for each axis, `max_pools = floor(log2(dim / 4))` is computed. If Z is much smaller than H/W (anisotropic data, common in DBT), Z receives fewer poolings. Example: `[(1,2,2), (2,2,2), (2,2,2), (1,2,2)]` instead of the fixed isotropic stride `(2,2,2)`.
-- **Channels per level**: starts at `base_ch=32`, doubles per level, capped at 320.
-- **Batch size**: estimated by a VRAM heuristic (`patch_voxels * max_channels * overhead`), maximizing what fits in GPU.
-
-The plan is saved as `architecture_plan.json`.
-
-#### 3.1.3 Resulting architecture
-
-The model is built with `nnUNet3D.from_plan(plan)` and preserves the architectural principles of nnU-Net:
-
-- **Residual blocks (`nnUNetResidualBlock`)**: 3D convolutions with residual shortcut, stabilizing deep training.
-- **Instance normalization** (`InstanceNorm3d`): useful with small batch size.
-- **LeakyReLU activation**: reduces the risk of dead neurons.
-- **Encoder with anisotropic strides**: pooling adapts to the data geometry. Short axes (Z in DBT) receive less downsampling to avoid losing inter-slice information.
-- **Decoder with anisotropic `ConvTranspose3d`**: upsample kernels match the encoder strides.
-- **Gradient checkpointing**: trades compute for memory.
-- **Binary head**: `Conv3d 1x1 + sigmoid`.
-
-#### 3.1.4 Patch-based training (`src/patch_utils.py`)
-
-Instead of processing full volumes with padding, training uses **random patches** of fixed size (determined by the planner):
-
-- With probability `oversample_foreground` (0.33 by default), the patch center is forced onto a foreground voxel, ensuring the network sees enough tumor despite extreme class imbalance (fg < 1%).
-- Foreground coordinates are pre-computed per volume for fast extraction.
-- Collation is trivial (all patches have the same size), eliminating the need for dynamic padding.
-
-#### 3.1.5 Sliding Window Inference
-
-At validation and test time, the full volume is traversed with a **sliding window** with configurable overlap (50% by default):
-
-- Each patch is predicted independently.
-- Predictions are accumulated using a **Gaussian importance map** (central voxels weigh more than edges) to avoid seam artifacts.
-- The result is a full-resolution probability map.
-
-#### 3.1.6 Post-processing (`src/postprocess.py`)
-
-After prediction, **3D connected-components** filtering is applied:
-
-- Several minimum-size thresholds (`min_size`) are tested on the validation set.
-- The `min_size` that maximizes validation Dice is automatically selected.
-- The same threshold is applied to test predictions.
+> An earlier *in-house* nnU-Net replica (`nnUnet_original`) was used during development but was
+> **superseded by the official nnU-Netv2** and is not part of the manuscript. Its code and
+> outputs are kept under `_descartado/` for traceability only.
 
 ### 3.2 Attention U-Net 3D (`src/models/attention_unet`)
 
@@ -188,7 +153,7 @@ This variant serves as a strong baseline: fewer advanced mechanisms than Attenti
 
 ### 3.4 Architecture comparison
 
-| Feature | nnUNet 3D Auto | Attention U-Net | U-Net BCE |
+| Feature | nnU-Net (v2) | Attention U-Net | U-Net BCE |
 |---------------|:---------:|:---------------:|:---------:|
 | Parameters (M) | 31.3 (auto) | 35.575 | 23.535 |
 | Auto-configuration | Yes (fingerprint + planner) | No | No |
@@ -209,7 +174,10 @@ This variant serves as a strong baseline: fewer advanced mechanisms than Attenti
 
 ## 4. Training Configuration
 
-All experiments share the same base configuration, defined in `configs/config.yaml`:
+The two in-house-trained models (**3D U-Net baseline** and **Attention U-Net**) share the base
+configuration below, defined in `configs/config.yaml`. The **official nnU-Net** follows
+nnU-Netv2's own self-configured defaults (notably **1000 epochs**); see
+`experiments/nnunet_official/` for its exact plans and trainer.
 
 | Parameter | Value |
 |-----------|-------|
@@ -218,28 +186,22 @@ All experiments share the same base configuration, defined in `configs/config.ya
 | **Optimizer** | AdamW (lr=0.001, weight_decay=1e-5) |
 | **Scheduler** | Polynomial LR Decay: `lr * (1 - epoch/max_epochs)^0.9` |
 | **Warmup** | 5 epochs (linear warmup) |
-| **Batch size** | 1 (Att. U-Net, U-Net BCE) / auto-computed (nnUNet) |
+| **Batch size** | 1 |
 | **AMP** | Enabled (Mixed Precision with GradScaler) |
 | **Gradient clipping** | max_norm=1.0 |
 | **Binarization threshold** | 0.5 |
-| **Foreground oversampling** | 0.5 (Att. U-Net, U-Net BCE) / 0.33 patch-based (nnUNet) |
+| **Foreground oversampling** | 0.5 |
 | **Augmentation** | Enabled |
 | **Early stopping** | Disabled (full 500 epochs are trained) |
 
-**Auto-configured nnUNet specifics:**
-
-| Parameter | Value |
-|-----------|-------|
-| **auto_plan** | `true` (enables fingerprint + planner) |
-| **gpu_vram_gb** | 16.0 (RTX 4070 Ti SUPER) |
-| **Training** | Patch-based (auto-computed size) |
-| **Validation/Test** | Sliding window with overlap=0.5 and Gaussian weighting |
-| **Foreground oversampling** | 0.33 (prob. of forcing foreground-centered patch) |
-| **Post-processing** | Connected components (min_size auto-optimized on val) |
+**Official nnU-Net:** trained with the **nnU-Netv2** framework using its self-configured 3D
+full-resolution plans (auto patch size, anisotropic pooling, patch-based foreground
+oversampling, sliding-window Gaussian inference) and a custom seeded trainer
+(`nnUNetTrainer_Seeded42`). See `experiments/nnunet_official/nnunet_root/.../plans.json`.
 
 ### 4.1 Loss functions
 
-- **Dice + CE** (nnUNet, Attention U-Net): `0.5 * DiceLoss + 0.5 * BCE`. Combines direct optimization of the Dice coefficient with BCE stability to handle extreme class imbalance.
+- **Dice + CE** (nnU-Net, Attention U-Net): `0.5 * DiceLoss + 0.5 * BCE`. Combines direct optimization of the Dice coefficient with BCE stability to handle extreme class imbalance.
 - **BCE** (U-Net BCE): Only Binary Cross-Entropy with logits (numerically stable).
 
 ### 4.2 Checkpoint saving
@@ -256,12 +218,11 @@ All experiments share the same base configuration, defined in `configs/config.ya
 
 ### 4.4 Training time
 
+Indicative wall-clock from the development machine (RTX 4070 Ti SUPER). The official nnU-Net was
+trained separately with nnU-Netv2 (1000 epochs) and is not included in this table.
+
 | Model | Dataset | Time |
 |--------|---------|--------|
-| nnUNet | Both_RealWorld | 12.0h |
-| nnUNet | Both | 12.1h |
-| nnUNet | small_tumor | 9.9h |
-| nnUNet | large_tumor | 11.2h |
 | Attention_UNet | Both_RealWorld | 5.7h |
 | Attention_UNet | Both | 5.7h |
 | Attention_UNet | small_tumor | 1.4h |
@@ -270,7 +231,7 @@ All experiments share the same base configuration, defined in `configs/config.ya
 | UNet_BCE | Both | 2.8h |
 | UNet_BCE | small_tumor | 0.7h |
 | UNet_BCE | large_tumor | 2.1h |
-| **Total** | | **~70.8h** |
+| **Total (in-house models)** | | **~25.5h** |
 
 ---
 
@@ -309,56 +270,52 @@ Twelve segmentation metrics are computed for each experiment. All metrics are ev
 
 ## 6. Results
 
+These are the numbers reported in the manuscript. **nnU-Net** = official nnU-Netv2
+(`nnUNetTrainer_Seeded42`); **3D U-Net (baseline)** = U-Net BCE; **Attention U-Net** =
+Attention U-Net 3D. For U-Net BCE on Large / Small / Both these are the **leakage-free
+re-trained** runs (`results/outputs_clean/`); see `docs/data_leakage_audit.md`. All metrics
+use the best checkpoint.
+
 ### 6.1 Validation metrics (best checkpoint)
 
-| Model | Dataset | Dice | IoU | Precision | Recall | HD95 | AP | mAP |
-|--------|---------|:----:|:---:|:---------:|:------:|:----:|:--:|:---:|
-| nnUNet | Both_RealWorld | 0.7499 | 0.6485 | 0.7324 | 0.7989 | 32.06 | 0.6849 | 0.3778 |
-| nnUNet | Both | 0.7201 | 0.6335 | 0.7115 | 0.7501 | 33.23 | 0.6781 | 0.4010 |
-| nnUNet | small_tumor | 0.6890 | 0.5688 | 0.7368 | 0.7188 | 34.73 | 0.5798 | 0.2627 |
-| **nnUNet** | **large_tumor** | **0.8976** | **0.8156** | **0.8778** | **0.9230** | **1.79** | **0.8598** | **0.5972** |
-| Att. U-Net | Both_RealWorld | 0.4871 | 0.3737 | 0.4774 | 0.5558 | 68.36 | 0.4137 | 0.1006 |
-| Att. U-Net | Both | 0.4799 | 0.3663 | 0.4916 | 0.5245 | 68.85 | 0.4061 | 0.0958 |
-| Att. U-Net | small_tumor | 0.3924 | 0.2740 | 0.3585 | 0.6022 | 88.88 | 0.2827 | 0.0217 |
-| Att. U-Net | large_tumor | 0.6597 | 0.5138 | 0.5865 | 0.7811 | 29.57 | 0.5614 | 0.1601 |
-| U-Net BCE | Both_RealWorld | 0.7796 | 0.6505 | 0.7882 | 0.7801 | 14.25 | 0.8309 | 0.3374 |
-| **U-Net BCE** | **Both** | **0.8020** | **0.6767** | **0.8289** | **0.7840** | **20.15** | **0.8483** | **0.3860** |
-| U-Net BCE | small_tumor | 0.5394 | 0.4089 | 0.5600 | 0.5470 | 51.38 | 0.5785 | 0.0817 |
-| U-Net BCE | large_tumor | 0.8100 | 0.6949 | 0.8626 | 0.7715 | 21.68 | 0.8525 | 0.4510 |
+Dice and IoU are reported for all three models (the official nnU-Netv2 validation summary
+stores only these two natively).
+
+| Model | Dataset | Dice | IoU |
+|--------|---------|:----:|:---:|
+| nnU-Net | large_tumor | 0.8922 | 0.8081 |
+| nnU-Net | small_tumor | 0.7358 | 0.6208 |
+| nnU-Net | Both | 0.7716 | 0.6746 |
+| nnU-Net | Both_RealWorld | 0.7308 | 0.6428 |
+| 3D U-Net (baseline) | large_tumor | 0.7873 | 0.6591 |
+| 3D U-Net (baseline) | small_tumor | 0.5361 | 0.3931 |
+| 3D U-Net (baseline) | Both | 0.7003 | 0.5895 |
+| 3D U-Net (baseline) | Both_RealWorld | 0.7317 | 0.6325 |
+| Attention U-Net | large_tumor | 0.6597 | 0.5138 |
+| Attention U-Net | small_tumor | 0.3924 | 0.2740 |
+| Attention U-Net | Both | 0.4799 | 0.3663 |
+| Attention U-Net | Both_RealWorld | 0.5838 | 0.4579 |
 
 ### 6.2 Test metrics (best checkpoint)
 
 | Model | Dataset | Dice | IoU | Precision | Recall | HD95 | AP | mAP |
 |--------|---------|:----:|:---:|:---------:|:------:|:----:|:--:|:---:|
-| nnUNet | Both_RealWorld | 0.8113 | 0.7113 | 0.8366 | 0.8234 | 16.34 | 0.7667 | 0.4624 |
-| nnUNet | Both | 0.8417 | 0.7371 | 0.8126 | 0.8840 | 8.58 | 0.7878 | 0.4695 |
-| nnUNet | small_tumor | 0.4470 | 0.3374 | 0.4364 | 0.5327 | 46.68 | 0.3347 | 0.0608 |
-| nnUNet | large_tumor | 0.8901 | 0.8040 | 0.9085 | 0.8760 | 2.74 | 0.8439 | 0.5668 |
-| Att. U-Net | Both_RealWorld | 0.5729 | 0.4280 | 0.5854 | 0.6298 | 49.98 | 0.4564 | 0.0971 |
-| Att. U-Net | Both | 0.5823 | 0.4334 | 0.6036 | 0.6458 | 54.42 | 0.4564 | 0.0888 |
-| Att. U-Net | small_tumor | 0.3670 | 0.2692 | 0.3047 | 0.5045 | 53.90 | 0.2795 | 0.0405 |
-| Att. U-Net | large_tumor | 0.7776 | 0.6434 | 0.7661 | 0.8124 | 29.78 | 0.7028 | 0.2529 |
-| **U-Net BCE** | **Both_RealWorld** | **0.8233** | **0.7096** | **0.7937** | **0.8623** | **6.92** | **0.8888** | **0.4381** |
-| **U-Net BCE** | **Both** | **0.8543** | **0.7511** | **0.8385** | **0.8781** | **10.96** | **0.9271** | **0.5266** |
-| **U-Net BCE** | **small_tumor** | **0.8207** | **0.6964** | **0.8103** | **0.8334** | **22.98** | **0.8996** | **0.3621** |
-| **U-Net BCE** | **large_tumor** | **0.9138** | **0.8418** | **0.9240** | **0.9050** | **1.78** | **0.9669** | **0.7080** |
+| nnU-Net | large_tumor | 0.8641 | 0.7661 | 0.8828 | 0.8612 | 48.50 | 0.7569 | 0.4639 |
+| nnU-Net | small_tumor | 0.5602 | 0.4758 | 0.6739 | 0.5739 | 34.37 | 0.4592 | 0.2133 |
+| nnU-Net | Both | 0.8414 | 0.7372 | 0.8942 | 0.8082 | 2.17 | 0.7241 | 0.4151 |
+| nnU-Net | Both_RealWorld | 0.3525 | 0.2786 | 0.5862 | 0.3647 | 141.22 | 0.2700 | 0.0761 |
+| 3D U-Net (baseline) | large_tumor | 0.8295 | 0.7167 | 0.8410 | 0.8462 | 3.46 | 0.8769 | 0.4689 |
+| 3D U-Net (baseline) | small_tumor | 0.2635 | 0.1979 | 0.2337 | 0.3319 | 40.00 | 0.2655 | 0.0945 |
+| 3D U-Net (baseline) | Both | 0.7264 | 0.6084 | 0.7282 | 0.7383 | 18.07 | 0.7536 | 0.3308 |
+| 3D U-Net (baseline) | Both_RealWorld | 0.4116 | 0.2982 | 0.5416 | 0.4731 | 81.15 | 0.3959 | 0.0638 |
+| Attention U-Net | large_tumor | 0.7776 | 0.6434 | 0.7661 | 0.8124 | 29.78 | 0.7028 | 0.2529 |
+| Attention U-Net | small_tumor | 0.3670 | 0.2692 | 0.3047 | 0.5045 | 53.90 | 0.2795 | 0.0405 |
+| Attention U-Net | Both | 0.5823 | 0.4334 | 0.6036 | 0.6458 | 54.42 | 0.4564 | 0.0888 |
+| Attention U-Net | Both_RealWorld | 0.4207 | 0.2941 | 0.4098 | 0.4879 | 68.66 | 0.2965 | 0.0174 |
 
-### 6.3 Best epoch per experiment
-
-| Model | Dataset | Best epoch (of 500) | Val Dice at best epoch |
-|--------|---------|:----:|:----:|
-| nnUNet | Both_RealWorld | 150 | 0.7499 |
-| nnUNet | Both | 136 | 0.7201 |
-| nnUNet | small_tumor | 202 | 0.6890 |
-| nnUNet | large_tumor | 45 | 0.8976 |
-| Att. U-Net | Both_RealWorld | 253 | 0.4871 |
-| Att. U-Net | Both | 394 | 0.4799 |
-| Att. U-Net | small_tumor | 286 | 0.3924 |
-| Att. U-Net | large_tumor | 462 | 0.6597 |
-| U-Net BCE | Both_RealWorld | 199 | 0.7796 |
-| U-Net BCE | Both | 200 | 0.8020 |
-| U-Net BCE | small_tumor | 284 | 0.5394 |
-| U-Net BCE | large_tumor | 300 | 0.8100 |
+Per-case test results for the official nnU-Net live in
+`experiments/nnunet_official/eval/results_Dataset00*__nnUNetTrainer_Seeded42.json`; for the
+other two models in `results/outputs_*/<run>/logs/test_metrics.json`.
 
 ---
 
@@ -373,33 +330,16 @@ Paper_DBT/
 |   |-- preprocessed/                 # Preprocessed .npy data
 |       |-- README.md                 # Preprocessing instructions
 |
-|-- src/                              # Source code
-|   |-- models/                       # Implementations of the 3 models
-|   |   |-- nnunet/                   # Auto-configured nnU-Net 3D
-|   |   |   |-- src/                  # Model modules
-|   |   |   |   |-- nnunet.py         # nnUNet3D architecture (anisotropic strides)
-|   |   |   |   |-- fingerprint.py    # Dataset statistical analysis
-|   |   |   |   |-- planner.py        # Architecture auto-planning
-|   |   |   |   |-- patch_utils.py    # Patches + sliding window inference
-|   |   |   |   |-- postprocess.py    # Connected-components filtering
-|   |   |   |   |-- train_eval.py     # Training/evaluation
-|   |   |   |   |-- metrics.py        # 12 segmentation metrics
-|   |   |   |   |-- dataset_dbt.py    # Dataset (volumes + patches)
-|   |   |   |   |-- io_utils.py       # Study discovery
-|   |   |   |   |-- config_loader.py  # YAML config loading
-|   |   |   |-- configs/config.yaml   # Hyperparameters
-|   |   |   |-- train_unet_dbt.py     # Main script
-|   |   |
+|-- src/                              # Source code (in-house models)
+|   |-- models/
 |   |   |-- attention_unet/           # Attention U-Net 3D
-|   |   |   |-- src/
-|   |   |   |   |-- attention_unet3d.py
-|   |   |   |   |-- ...
+|   |   |   |-- src/                  # attention_unet3d.py, metrics.py, ...
+|   |   |   |-- configs/config.yaml
 |   |   |   |-- train_unet_dbt.py
 |   |   |
-|   |   |-- unet_bce/                 # U-Net with BCE Loss
-|   |       |-- src/
-|   |       |   |-- unet3d.py
-|   |       |   |-- ...
+|   |   |-- unet_bce/                 # 3D U-Net baseline (BCE loss)
+|   |       |-- src/                  # unet3d.py, dataset_dbt.py, metrics.py, ...
+|   |       |-- configs/config.yaml
 |   |       |-- train_unet_bce.py
 |   |
 |   |-- shared/                       # Modules shared between models
@@ -407,34 +347,29 @@ Paper_DBT/
 |   |   |-- traceability.py           # run_config.json and run_summary.json
 |   |   |-- augmentations.py          # Data augmentations
 |   |
-|   |-- preprocessing/                # Preprocessing pipeline
-|   |   |-- preprocess_simple.py      # Main preprocessing
-|   |   |-- preprocess_dbt.py         # Alternative preprocessing
-|   |   |-- run_preprocess_all.py     # Batch execution
-|   |   |-- run_preprocess_simple.py
-|   |   |-- visualize_preprocessed_dataset.py
-|   |   |-- visualize_volumes.py
-|   |   |-- build_global_hist_ref.py
-|   |   |-- prune_slices_preprocessed_dataset.py
-|   |   |-- summarize_dataset_dimensions.py
+|   |-- preprocessing/                # Preprocessing pipeline (preprocess_simple.py, ...)
 |   |
-|   |-- evaluation/                   # Evaluation scripts (reserved)
-|   |
-|   |-- run_test_trainings.py         # Orchestrator for the 12 experiments
-|   |-- train_all_models.py           # Master training script
-|   |-- fix_outputs.py                # Result post-processing
+|   |-- run_test_trainings.py         # Orchestrator (in-house models)
 |   |-- generate_samples_and_summary.py  # Sample and summary generation
 |
-|-- results/                          # Results (excluded from git)
-|   |-- checkpoints/                  # Trained models (.pt)
-|   |-- logs/                         # Metrics and plots
-|   |-- predictions/                  # Predictions (.npy)
-|   |-- README.md                     # Results documentation
+|-- experiments/
+|   |-- nnunet_official/              # Official nnU-Netv2 pipeline (the manuscript's "nnU-Net")
+|       |-- scripts/                  # 01_convert_to_nifti, 02_make_splits, 06_evaluate,
+|       |   |                         #   metrics.py, custom trainers (nnUNetTrainer_Seeded42)
+|       |-- nnunet_root/              # dataset.json, plans, splits_final, fingerprints, summaries
+|       |-- eval/                     # results_Dataset00*__nnUNetTrainer_Seeded42.json (test)
 |
-|-- docs/                             # Additional documentation
+|-- results/
+|   |-- outputs_clean/                # UNet_BCE leakage-free re-trains (Large/Small/Both)
+|   |-- outputs_improved/             # Attention_UNet (4 datasets) + UNet_BCE Both_RealWorld
 |
+|-- docs/
+|   |-- data_leakage_audit.md         # Leakage audit and resolution
+|
+|-- _descartado/                      # Not used in the manuscript (in-house nnU-Net replica, etc.)
+|
+|-- REPO_CONTENTS.md                  # Contents & provenance
 |-- requirements.txt                  # Python dependencies
-|-- .gitignore                        # Files excluded from the repo
 |-- README.md                         # This file
 ```
 
@@ -501,33 +436,31 @@ python src/preprocessing/run_preprocess_all.py
 
 ### 8.4 Train models
 
-To run all 12 experiments (3 models x 4 datasets):
+Train the two in-house models (3D U-Net baseline and Attention U-Net):
 
 ```bash
-python src/run_test_trainings.py
-```
-
-To train an individual model:
-
-```bash
-# nnUNet
-python src/models/nnunet/train_unet_dbt.py \
-    --config src/models/nnunet/configs/config.yaml
-
 # Attention U-Net
 python src/models/attention_unet/train_unet_dbt.py \
     --config src/models/attention_unet/configs/config.yaml
 
-# U-Net BCE
+# U-Net BCE (3D U-Net baseline)
 python src/models/unet_bce/train_unet_bce.py \
     --config src/models/unet_bce/configs/config.yaml
+```
+
+Train / evaluate the official **nnU-Net** (nnU-Netv2) via its dedicated pipeline:
+
+```bash
+# See experiments/nnunet_official/scripts/run_pipeline.sh for the full sequence:
+#   01_convert_to_nifti.py -> 02_make_splits.py -> nnUNetv2_train (nnUNetTrainer_Seeded42)
+#   -> 06_evaluate.py
+bash experiments/nnunet_official/scripts/run_pipeline.sh
 ```
 
 ### 8.5 Evaluate and generate visualizations
 
 ```bash
 python src/generate_samples_and_summary.py
-python src/fix_outputs.py
 ```
 
 ---

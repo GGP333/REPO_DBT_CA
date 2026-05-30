@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/gabriel/Escritorio/Paper_DBT/src/models/unet_bce/train_unet_bce.py", line 20, in <module>
+    from config_loader import load_config
+ModuleNotFoundError: No module named 'config_loader'
+ERROR conda.cli.main_run:execute(125): `conda run python /home/gabriel/Escritorio/Paper_DBT/src/models/unet_bce/train_unet_bce.py --config /home/gabriel/Escritorio/Paper_DBT/src/models/unet_bce/configs/config.yaml --dataset-root /home/gabriel/Escritorio/Paper_DBT/Dataset_Preprocessed/Dataset_small_tumor --test-ids-file /home/gabriel/Escritorio/Paper_DBT/outputs_clean/_test_ids/small_tumor.txt --out-dir /home/gabriel/Escritorio/Paper_DBT/outputs_clean/UNet_BCE_Dataset_small_tumor` failed. (See above for error)

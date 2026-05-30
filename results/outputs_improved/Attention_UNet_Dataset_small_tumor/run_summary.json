@@ -1,0 +1,57 @@
+{
+  "timestamp": "2026-02-07T11:50:34.149148",
+  "total_epochs": 500,
+  "total_time_seconds": 4992.442284584045,
+  "total_time_human": "1.4h",
+  "best_epoch": {
+    "epoch": 286,
+    "val_dice": 0.3923844784498215,
+    "train_loss": 0.1949061554941264
+  },
+  "last_epoch": {
+    "epoch": 500,
+    "val_dice": 0.3335911639034748,
+    "train_loss": 0.13660787486217238
+  },
+  "best_checkpoint": "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_small_tumor/checkpoints/best.pt",
+  "val_metrics": {
+    "dice": 0.3923844784498215,
+    "iou": 0.2739949196577072,
+    "precision": 0.3584731101989746,
+    "recall": 0.6022135734558105,
+    "f1": 0.39238411784172056,
+    "accuracy": 0.9979846954345704,
+    "hausdorff": 132.6631820678711,
+    "hausdorff_95": 88.8849609375,
+    "fp_per_volume": 0.001418304443359375,
+    "fp_per_image": 0.001418304443359375,
+    "ap": 0.2826539263129234,
+    "mAP": 0.02172270268201828
+  },
+  "test_metrics": {
+    "dice": 0.3669767479656632,
+    "iou": 0.26916864023193676,
+    "precision": 0.3047408016146988,
+    "recall": 0.5045350989552192,
+    "f1": 0.36697643995293205,
+    "accuracy": 0.9984323183695475,
+    "hausdorff": 72.3984603881836,
+    "hausdorff_95": 53.89761861165365,
+    "fp_per_volume": 0.0008145968119303385,
+    "fp_per_image": 0.0008145968119303385,
+    "ap": 0.2794792056083679,
+    "mAP": 0.04047080377737681
+  },
+  "sample_pngs": [
+    "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_small_tumor/samples/test_sample_dbt_001.png",
+    "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_small_tumor/samples/test_sample_dbt_004.png",
+    "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_small_tumor/samples/test_sample_dbt_021.png",
+    "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_small_tumor/samples/val_sample_dbt_005.png",
+    "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_small_tumor/samples/val_sample_dbt_008.png",
+    "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_small_tumor/samples/val_sample_dbt_009.png",
+    "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_small_tumor/samples/val_sample_dbt_024.png",
+    "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_small_tumor/samples/val_sample_dbt_025.png"
+  ],
+  "fixed_timestamp": "2026-02-09T13:21:18.406678",
+  "samples_timestamp": "2026-02-09T13:40:43.197357"
+}

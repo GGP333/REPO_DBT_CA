@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-02-13T13:26:18.412008",
+  "total_epochs": 500,
+  "total_time_seconds": 24836.746966838837,
+  "total_time_human": "6.9h",
+  "best_epoch": {
+    "epoch": 344,
+    "val_dice": 0.5838038283296506,
+    "train_loss": 0.14680873835459352
+  },
+  "last_epoch": {
+    "epoch": 500,
+    "val_dice": 0.57498039249219,
+    "train_loss": 0.12036366681926526
+  },
+  "best_checkpoint": "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_Both_RealWorld/checkpoints/best.pt",
+  "val_metrics": {
+    "dice": 0.5838038283296506,
+    "iou": 0.457897745657418,
+    "precision": 0.5796873457096301,
+    "recall": 0.641356130206877,
+    "f1": 0.5838034088922978,
+    "accuracy": 0.9947354243351862,
+    "hausdorff": 95.86196545454172,
+    "hausdorff_95": 47.59471565026503,
+    "fp_per_volume": 0.0034969036395733175,
+    "fp_per_image": 0.0034969036395733175,
+    "ap": 0.4940662783272387,
+    "mAP": 0.1500738340501602
+  },
+  "test_metrics": {
+    "dice": 0.42067260444519167,
+    "iou": 0.29411818012950064,
+    "precision": 0.4097628474276959,
+    "recall": 0.4879465271035125,
+    "f1": 0.4206721879541894,
+    "accuracy": 0.9932542324066163,
+    "hausdorff": 124.42210063934326,
+    "hausdorff_95": 68.6619990825653,
+    "fp_per_volume": 0.004587030410766602,
+    "fp_per_image": 0.004587030410766602,
+    "ap": 0.2964670344609715,
+    "mAP": 0.017423447966575623
+  },
+  "sample_pngs": []
+}

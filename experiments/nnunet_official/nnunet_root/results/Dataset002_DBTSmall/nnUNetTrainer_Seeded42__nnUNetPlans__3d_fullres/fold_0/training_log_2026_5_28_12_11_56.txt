@@ -1,0 +1,23 @@
+
+#######################################################################
+Please cite the following paper when using nnU-Net:
+Isensee, F., Jaeger, P. F., Kohl, S. A., Petersen, J., & Maier-Hein, K. H. (2021). nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation. Nature methods, 18(2), 203-211.
+#######################################################################
+ 
+2026-05-28 12:11:56.639483: Using torch.compile... 
+2026-05-28 12:11:57.555288: Using splits from existing split file: /home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/preprocessed/Dataset002_DBTSmall/splits_final.json 
+2026-05-28 12:11:57.561721: The split file contains 5 splits. 
+2026-05-28 12:11:57.561743: Desired fold for training: 0 
+2026-05-28 12:11:57.561756: This split has 22 training and 5 validation cases. 
+2026-05-28 12:11:57.561797: predicting dbt_005 
+2026-05-28 12:11:57.567881: dbt_005, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:12:02.067100: predicting dbt_008 
+2026-05-28 12:12:02.072827: dbt_008, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:12:02.404565: predicting dbt_009 
+2026-05-28 12:12:02.409844: dbt_009, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:12:02.730468: predicting dbt_024 
+2026-05-28 12:12:02.736587: dbt_024, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:12:03.056645: predicting dbt_025 
+2026-05-28 12:12:03.061660: dbt_025, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:12:05.719688: Validation complete 
+2026-05-28 12:12:05.719748: Mean Validation Dice:  0.7357644854985643 

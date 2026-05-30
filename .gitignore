@@ -1,94 +1,54 @@
-# Python
+# .gitignore for Repo_DBT_CA (manuscript support repo)
+# Heavy/derived artifacts are already physically excluded from this repo.
+# Curated results (figures, metrics, training logs) ARE versioned on purpose.
+
+# Python caches
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 
-# Virtual Environments
+# Virtual environments
 venv/
 env/
 ENV/
-env.bak/
-venv.bak/
+.venv/
 
-# IDEs
+# IDEs / OS
 .vscode/
 .idea/
 *.swp
-*.swo
 *~
 .DS_Store
 
-# Jupyter Notebook
-.ipynb_checkpoints
-*.ipynb
+# Jupyter
+.ipynb_checkpoints/
 
-# PyTorch
+# --- Heavy artifacts: never commit ---
+# Model weights
 *.pt
 *.pth
 *.ckpt
-
-# Data directories (large files)
-Dataset/
-Dataset_Preprocessed/
-data/raw/*
-data/preprocessed/*
-!data/raw/.gitkeep
-!data/preprocessed/.gitkeep
-!data/raw/README.md
-!data/preprocessed/README.md
-
-# Output directories (reproducible results)
-outputs_improved/
-Experimento_Cristina_Alfaro_Enviar/
-Experimento_Cristina_Alfaro_Enviar.zip
-results/checkpoints/*.pt
-results/checkpoints/*.pth
-results/predictions/*.npy
-results/logs/*.png
-results/logs/*.pdf
-
-# Keep structure files
-!results/checkpoints/.gitkeep
-!results/predictions/.gitkeep
-!results/logs/.gitkeep
-
-# Temporary files
-*.log
-*.tmp
+checkpoints/
+# Raw prediction arrays / tensors
 *.npy
 *.npz
+# Raw imaging data
 *.tif
 *.tiff
-*.png
-*.jpg
-*.jpeg
+Dataset/
+Dataset_Preprocessed/
+data/raw/
+data/preprocessed/
+# Archives
+*.zip
+*.tar
+*.tar.gz
 
-# System files
-.cache/
-*.pid
-.cursor/
+# nnU-Net heavy internals (keep only light configs + training_log*.txt)
+**/nnunet_root/raw/
+**/nnunet_root/preprocessed/
+**/eval/predictions/
 
-# Allow specific important files
-!docs/**/*.png
-!docs/**/*.jpg
-!README.md
+# NOTE: *.png, *.log, *.txt, *.csv, *.json are intentionally NOT ignored —
+# they hold the curated metrics, training curves, sample figures and training logs.

@@ -1,8 +1,8 @@
 """
 Reproduce the repo's nnUNet train/val/test split exactly.
 
-Mirrors `src/models/nnunet/train_unet_dbt.py::split_records` with the same
-defaults used during the original experiments:
+Self-contained reimplementation of the split logic, with the same defaults
+used during the original experiments:
     train_ratio = 0.8
     val_ratio   = 0.2
     test_ratio  = 0.1

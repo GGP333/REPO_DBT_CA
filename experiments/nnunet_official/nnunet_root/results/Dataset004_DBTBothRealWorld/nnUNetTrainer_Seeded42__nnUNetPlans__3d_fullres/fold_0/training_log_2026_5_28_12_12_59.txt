@@ -1,0 +1,65 @@
+
+#######################################################################
+Please cite the following paper when using nnU-Net:
+Isensee, F., Jaeger, P. F., Kohl, S. A., Petersen, J., & Maier-Hein, K. H. (2021). nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation. Nature methods, 18(2), 203-211.
+#######################################################################
+ 
+2026-05-28 12:13:00.302855: Using torch.compile... 
+2026-05-28 12:13:01.113477: Using splits from existing split file: /home/gabriel/Escritorio/Paper_DBT/experiments/nnunet_official/nnunet_root/preprocessed/Dataset004_DBTBothRealWorld/splits_final.json 
+2026-05-28 12:13:01.113577: The split file contains 5 splits. 
+2026-05-28 12:13:01.113592: Desired fold for training: 0 
+2026-05-28 12:13:01.113604: This split has 104 training and 26 validation cases. 
+2026-05-28 12:13:01.113653: predicting dbt_001 
+2026-05-28 12:13:01.119222: dbt_001, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:05.484777: predicting dbt_012 
+2026-05-28 12:13:05.490352: dbt_012, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:05.811203: predicting dbt_013 
+2026-05-28 12:13:05.816207: dbt_013, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:06.135932: predicting dbt_014 
+2026-05-28 12:13:06.141085: dbt_014, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:06.460191: predicting dbt_020 
+2026-05-28 12:13:06.465314: dbt_020, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:06.784899: predicting dbt_021 
+2026-05-28 12:13:06.790526: dbt_021, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:07.110455: predicting dbt_028 
+2026-05-28 12:13:07.128170: dbt_028, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:07.449571: predicting dbt_036 
+2026-05-28 12:13:07.455578: dbt_036, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:07.775085: predicting dbt_044 
+2026-05-28 12:13:07.780957: dbt_044, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:08.100362: predicting dbt_045 
+2026-05-28 12:13:08.106273: dbt_045, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:08.425505: predicting dbt_046 
+2026-05-28 12:13:08.431642: dbt_046, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:08.751169: predicting dbt_049 
+2026-05-28 12:13:08.757619: dbt_049, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:09.077381: predicting dbt_051 
+2026-05-28 12:13:09.082951: dbt_051, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:09.402460: predicting dbt_055 
+2026-05-28 12:13:09.408654: dbt_055, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:09.728053: predicting dbt_057 
+2026-05-28 12:13:09.733776: dbt_057, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:10.053279: predicting dbt_058 
+2026-05-28 12:13:10.058955: dbt_058, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:10.378713: predicting dbt_076 
+2026-05-28 12:13:10.384479: dbt_076, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:10.704053: predicting dbt_090 
+2026-05-28 12:13:10.709839: dbt_090, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:11.029647: predicting dbt_098 
+2026-05-28 12:13:11.035282: dbt_098, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:11.355279: predicting dbt_104 
+2026-05-28 12:13:11.361075: dbt_104, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:11.680887: predicting dbt_108 
+2026-05-28 12:13:11.686344: dbt_108, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:12.005953: predicting dbt_112 
+2026-05-28 12:13:12.011060: dbt_112, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:12.330979: predicting dbt_116 
+2026-05-28 12:13:12.336779: dbt_116, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:12.656204: predicting real_dbt_003 
+2026-05-28 12:13:12.660053: real_dbt_003, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:12.979877: predicting real_dbt_012 
+2026-05-28 12:13:12.984263: real_dbt_012, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:13.304232: predicting real_dbt_018 
+2026-05-28 12:13:13.308242: real_dbt_018, shape torch.Size([1, 15, 256, 512]), rank 0 
+2026-05-28 12:13:15.926784: Validation complete 
+2026-05-28 12:13:15.926830: Mean Validation Dice:  0.7308341809489831 

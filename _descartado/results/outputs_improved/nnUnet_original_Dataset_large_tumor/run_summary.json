@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-02-11T15:01:06.855651",
+  "total_epochs": 500,
+  "total_time_seconds": 40493.32231140137,
+  "total_time_human": "11.2h",
+  "best_epoch": {
+    "epoch": 45,
+    "val_dice": 0.8975601308047771,
+    "train_loss": 0.059011765241622924
+  },
+  "last_epoch": {
+    "epoch": 500,
+    "val_dice": 0.8816647902131081,
+    "train_loss": 0.008027159473858774
+  },
+  "best_checkpoint": "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/nnUnet_original_Dataset_large_tumor/checkpoints/best.pt",
+  "val_metrics": {
+    "dice": 0.8975601308047771,
+    "iou": 0.8156191185116768,
+    "precision": 0.8778371512889862,
+    "recall": 0.923036489635706,
+    "f1": 0.8975596353411674,
+    "accuracy": 0.9982106983661652,
+    "hausdorff": 53.97801148891449,
+    "hausdorff_95": 1.7925895974040031,
+    "fp_per_volume": 0.0012082159519195557,
+    "fp_per_image": 0.0012082159519195557,
+    "ap": 0.8597917929291725,
+    "mAP": 0.5972221754491329
+  },
+  "test_metrics": {
+    "dice": 0.8901464343070984,
+    "iou": 0.80397679656744,
+    "precision": 0.9085046127438545,
+    "recall": 0.8759951665997505,
+    "f1": 0.8901459574699402,
+    "accuracy": 0.9977608323097229,
+    "hausdorff": 50.398996353149414,
+    "hausdorff_95": 2.7399077713489532,
+    "fp_per_volume": 0.0007292032241821289,
+    "fp_per_image": 0.0007292032241821289,
+    "ap": 0.8438960239291191,
+    "mAP": 0.5667875297367573
+  },
+  "sample_pngs": []
+}

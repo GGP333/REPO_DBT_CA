@@ -18,8 +18,9 @@ patient-derived data unsuitable for distribution.
 | `experiments/nnunet_official/eval/*.json` | Official nnU-Net test results per dataset. |
 | `experiments/nnunet_official/nnunet_root/` | Lightweight nnU-Net configs only: `dataset.json`, plans, `splits_final.json`, fingerprints and `summary.json` (validation_best / validation_final / test). |
 | `results/outputs_clean/` | **UNet_BCE re-trained without data leakage** for Large / Small / Both (metrics, curves, sample figures, run configs). |
-| `results/outputs_improved/` | The other architectures (`Attention_UNet`, `nnUnet_original`) across the 4 datasets, plus the clean `UNet_BCE_Dataset_Both_RealWorld` run. Metrics, training curves, qualitative sample figures and run configs. |
+| `results/outputs_improved/` | `Attention_UNet` across the 4 datasets, plus the clean `UNet_BCE_Dataset_Both_RealWorld` run. Metrics, training curves, qualitative sample figures and run configs. |
 | `docs/data_leakage_audit.md` | Audit report documenting the UNet_BCE leakage and its resolution. |
+| `_descartado/` | Material **not used in the manuscript**, kept for traceability only: the in-house nnU-Net replica (`nnUnet_original`) and its source code, the `Modelos_Arreglado_v2` duplicate bundle, and exploratory nnU-Netv2 trainers (`5epochs`, `PaperStandardized_3ep`, `ARCHIVED_BUGGY`). |
 
 ## What is excluded (and why)
 
@@ -37,9 +38,17 @@ included here. Instead, `results/outputs_clean/` contains the leakage-free re-tr
 those three datasets. The `UNet_BCE_Dataset_Both_RealWorld` run was already clean and is kept
 as-is. See `docs/data_leakage_audit.md` for the full analysis.
 
-## Architectures × datasets covered
+## Architectures × datasets covered (manuscript)
 
-- Architectures: **UNet_BCE**, **Attention_UNet**, **nnUnet_original** (in-house nnU-Net
-  replica) and **official nnU-Netv2**.
+The manuscript reports **three** architectures:
+
+- **nnU-Net** → official **nnU-Netv2** (`experiments/nnunet_official/`, `nnUNetTrainer_Seeded42`).
+- **3D U-Net (baseline)** → **UNet_BCE** (`results/outputs_clean/` for Large/Small/Both,
+  `results/outputs_improved/UNet_BCE_Dataset_Both_RealWorld`).
+- **Attention U-Net** → **Attention_UNet** (`results/outputs_improved/`).
+
+The in-house nnU-Net replica (`nnUnet_original`) was **superseded by the official nnU-Netv2**
+and is **not** part of the manuscript; it lives in `_descartado/`.
+
 - Datasets: **D001 Large**, **D002 Small**, **D003 Both** (synthetic/curated), **D004
   Both_RealWorld** (test set = 100% real clinical cases → out-of-distribution evaluation).
