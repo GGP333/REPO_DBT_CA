@@ -1,0 +1,41 @@
+=== FT custom net: unet_bce ===
+warm-start UNet_BCE_Dataset_Both | missing=0 unexpected=0
+zero-shot (synthetic ckpt) on real test:
+  mean=0.0722
+  [ft] epoch 1/120 loss=0.7623
+  [ft] epoch 6/120 loss=0.3645
+  [ft] epoch 11/120 loss=0.3291
+  [ft] epoch 16/120 loss=0.1965
+  [ft] epoch 21/120 loss=0.1656
+  [ft] epoch 26/120 loss=0.1893
+  [ft] epoch 31/120 loss=0.1548
+  [ft] epoch 36/120 loss=0.1324
+  [ft] epoch 41/120 loss=0.1207
+  [ft] epoch 46/120 loss=0.1046
+  [ft] epoch 51/120 loss=0.0946
+  [ft] epoch 56/120 loss=0.0927
+  [ft] epoch 61/120 loss=0.0897
+  [ft] epoch 66/120 loss=0.0871
+  [ft] epoch 71/120 loss=0.0834
+  [ft] epoch 76/120 loss=0.0841
+  [ft] epoch 81/120 loss=0.0829
+  [ft] epoch 86/120 loss=0.0806
+  [ft] epoch 91/120 loss=0.0808
+  [ft] epoch 96/120 loss=0.0803
+  [ft] epoch 101/120 loss=0.0790
+  [ft] epoch 106/120 loss=0.0778
+  [ft] epoch 111/120 loss=0.0779
+  [ft] epoch 116/120 loss=0.0782
+  [ft] epoch 120/120 loss=0.0775
+  real_dbt_005: 0.000
+  real_dbt_006: 0.626
+  real_dbt_007: 0.409
+  real_dbt_010: 0.490
+  real_dbt_013: 0.535
+  real_dbt_014: 0.307
+  real_dbt_015: 0.731
+  real_dbt_016: 0.579
+  real_dbt_019: 0.006
+  real_dbt_020: 0.257
+
+unet_bce FT FINAL: mean=0.3939 median=0.4494 zeros=1/10

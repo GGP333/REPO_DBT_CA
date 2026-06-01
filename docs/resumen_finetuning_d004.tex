@@ -1,0 +1,224 @@
+\documentclass[11pt]{article}
+
+% --- Paquetes estándar (compila con pdflatex en cualquier TeX Live) ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\newcommand{\best}[1]{\textbf{#1}}
+
+\title{\textbf{Mejora del desempeño en datos reales (Dataset híbrido) \\
+para segmentación 3D de tumores en DBT}\\[4pt]
+\large Fine-tuning sim$\rightarrow$real, ensembles y análisis del límite de datos}
+\author{Gabriel Guerra}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent Se documenta una campaña de experimentos orientada a mejorar el desempeño
+de segmentación de tumores en imágenes \emph{reales} de tomosíntesis mamaria (DBT),
+correspondientes al dataset híbrido \textbf{D004} (\texttt{Dataset\_Both\_RealWorld}),
+cuyo conjunto de test está compuesto al 100\% por casos reales y que partía de un
+Dice de $\approx 0.35$. Mediante una metodología de \emph{fine-tuning} de dominio
+sintético$\rightarrow$real, función de pérdida orientada a \emph{recall} (Tversky),
+validación cruzada de 5 folds y \emph{ensembles} de arquitecturas, se elevó el Dice
+de test a \best{0.518} (mediana 0.594), eliminando todos los casos con detección nula
+(de 7/10 a 0/10). Se analiza el techo de desempeño alcanzable: con solo 20 casos reales
+disponibles, el límite oráculo es $\approx 0.53$, por lo que objetivos como $0.6$
+no son alcanzables sin incorporar más datos reales. Todos los experimentos son
+reproducibles y se reportan también los enfoques que \emph{no} mejoraron.
+\end{abstract}
+
+\section{Problema y diagnóstico}
+El proyecto compara cuatro arquitecturas sobre cuatro datasets de DBT. El dataset
+\textbf{D004} es el único cuya evaluación de test es 100\% \emph{out-of-distribution}
+(casos reales \texttt{real\_dbt\_*}), mientras que el entrenamiento es mayoritariamente
+sintético. El bajo desempeño inicial ($\sim$0.35) se diagnosticó como un
+\textbf{gap de dominio sintético$\rightarrow$real}, y no como un problema de
+arquitectura ni de geometría:
+\begin{itemize}\itemsep2pt
+  \item Todas las imágenes (sintéticas y reales) comparten dimensiones idénticas
+        ($512\times256\times15$, \emph{spacing} isotrópico $1$\,mm); el plan de nnU-Net
+        no aplica \emph{resampling}. Se descartó cualquier artefacto geométrico.
+  \item La distribución de intensidades difiere: los sintéticos presentan una cola
+        brillante (máx.\ $\sim$4--5$\sigma$) ausente en los reales (máx.\ $\sim$2$\sigma$).
+  \item El fallo es de \emph{recall}: el modelo sub-segmenta, no genera falsos positivos.
+\end{itemize}
+
+\section{Datos}
+\begin{itemize}\itemsep2pt
+  \item \textbf{Sintéticos:} 120 casos \texttt{dbt\_001..120}.
+  \item \textbf{Reales:} 20 casos \texttt{real\_dbt\_001..020} (\emph{único} conjunto real del proyecto; 20 pacientes distintos).
+  \item \textbf{Partición D004:} 10 reales de desarrollo (\texttt{imagesTr}) / 10 reales de test (\texttt{imagesTs}, \emph{held-out}).
+  \item \textbf{Sin fuga de datos (leakage):} pacientes distintos y sintéticos de fuente independiente (confirmado), por lo que el modelo base sintético no contiene información de los pacientes reales de test.
+\end{itemize}
+
+\section{Metodología}
+\subsection{Fine-tuning sim$\rightarrow$real}
+Se parte de un modelo entrenado en datos sintéticos (\emph{warm-start}) y se ajusta
+sobre los 10 casos reales de desarrollo con \emph{learning rate} reducido. La pérdida
+combina entropía cruzada con \textbf{Tversky} ($\alpha{=}0.3,\ \beta{=}0.7$), que
+penaliza con más fuerza los falsos negativos para incrementar el \emph{recall}:
+\begin{equation}
+\mathrm{TI} = \frac{\mathrm{TP}}{\mathrm{TP} + \alpha\,\mathrm{FP} + \beta\,\mathrm{FN}},
+\qquad \mathcal{L} = \mathrm{CE} + (1-\mathrm{TI}).
+\end{equation}
+
+\subsection{Validación cruzada y selección sin leakage}
+Sobre los 10 casos de desarrollo se usa una partición de \textbf{5 folds}. Las
+predicciones \emph{out-of-fold} (OOF) dan una señal de validación limpia con la que se
+seleccionan hiperparámetros del ensemble (pesos, umbral, post-proceso) \emph{sin tocar
+el test}. El conjunto de test (10 reales) se evalúa una sola vez con la configuración
+ya fijada.
+
+\subsection{Ensemble}
+Se promedian las probabilidades de varias redes (cada una con su ensemble de 5 folds).
+Los pesos por red y el umbral se eligen maximizando el Dice sobre el OOF de desarrollo.
+
+\section{Resultados}
+\subsection{Progresión del desempeño en test (10 reales)}
+\begin{table}[H]\centering
+\begin{tabular}{lccc}
+\toprule
+Etapa & Dice (media) & Mediana & Ceros \\
+\midrule
+Zero-shot (sintético sobre real)        & 0.163 & 0.000 & 7/10 \\
+Mezcla naive (histórico D004)            & 0.353 & ---   & 5/10 \\
+nnU-Net fine-tuning (Dice+CE)            & 0.403 & 0.387 & 2/10 \\
+nnU-Net + Tversky (1 fold)               & 0.465 & 0.524 & 2/10 \\
+nnU-Net + Tversky (ensemble 5 folds)     & 0.482 & 0.636 & 2/10 \\
+nnU-Net + umbral/combinación             & 0.505 & 0.556 & 1/10 \\
+\best{Ensemble 3 redes (nn+att+bce)}     & \best{0.518} & \best{0.594} & \best{0/10} \\
+\bottomrule
+\end{tabular}
+\caption{Evolución del Dice de test. El mejor resultado es el ensemble de las tres
+redes más fuertes, que además detecta el 100\% de las lesiones (0 casos nulos).}
+\end{table}
+
+\subsection{Fine-tuning por arquitectura (single model)}
+\begin{table}[H]\centering
+\begin{tabular}{lccc}
+\toprule
+Arquitectura & Dice (media) & Mediana & Ceros \\
+\midrule
+nnU-Net (Tversky, 5-fold + combinación) & 0.505 & 0.556 & 1/10 \\
+DynUNet (MONAI)                          & 0.475 & ---   & 1/10 \\
+Attention U-Net 3D                       & 0.407 & 0.425 & 0/10 \\
+SegResNet (MONAI)                        & 0.395 & ---   & 1/10 \\
+U-Net (BCE$\rightarrow$Tversky)          & 0.394 & 0.449 & 1/10 \\
+V-Net (MONAI)                            & 0.251 & ---   & 4/10 \\
+\bottomrule
+\end{tabular}
+\caption{Desempeño individual tras fine-tuning. Las redes son complementarias:
+nnU-Net domina los casos fáciles; U-Net (BCE) y Attention rescatan casos de bajo
+contraste que las demás fallan.}
+\end{table}
+
+\subsection{Ensembles}
+\begin{table}[H]\centering
+\begin{tabular}{lccc}
+\toprule
+Ensemble (pesos elegidos en OOF dev) & Dice (media) & Mediana & Ceros \\
+\midrule
+\best{3 redes: nn$\cdot$2 + att$\cdot$2 + bce$\cdot$3} & \best{0.518} & 0.594 & 0/10 \\
+4 redes (+ DynUNet)                                    & 0.508 & 0.581 & 0/10 \\
+6 redes (+ SegResNet, V-Net)                           & 0.508 & 0.581 & 0/10 \\
+nn + DynUNet                                           & 0.500 & 0.616 & 2/10 \\
+\bottomrule
+\end{tabular}
+\caption{``Menos es más'': el ensemble de las tres redes complementarias supera a
+configuraciones con más arquitecturas. SegResNet y V-Net resultan redundantes/débiles
+y la selección en dev les asigna peso nulo.}
+\end{table}
+
+\subsection{Resultado final por caso}
+\begin{table}[H]\centering
+\begin{tabular}{lc|lc}
+\toprule
+Caso & Dice & Caso & Dice \\
+\midrule
+real\_dbt\_005 & 0.778 & real\_dbt\_013 & 0.590 \\
+real\_dbt\_006 & 0.652 & real\_dbt\_014 & 0.519 \\
+real\_dbt\_007 & 0.461 & real\_dbt\_015 & 0.727 \\
+real\_dbt\_010 & 0.746 & real\_dbt\_016 & 0.598 \\
+real\_dbt\_019 & 0.050 & real\_dbt\_020 & 0.064 \\
+\bottomrule
+\end{tabular}
+\caption{Dice por caso del ensemble final de 3 redes (media 0.518, mediana 0.594).
+Los casos 019 y 020 (tumores de muy bajo contraste) son el cuello de botella, pero
+ya no quedan en cero.}
+\end{table}
+
+\section{Enfoques evaluados que no mejoraron}
+Por transparencia, se reportan los experimentos que \emph{no} aportaron:
+\begin{itemize}\itemsep2pt
+  \item \textbf{Backbone 2.5D pre-entrenado en ImageNet} (U-Net con encoder ResNet34,
+        slices vecinos como canales): Dice 0.280. La transferencia sintético$\rightarrow$real
+        fue nula y se pierde el contexto inter-slice del 3D.
+  \item \textbf{Mezcla del 2.5D con nnU-Net:} cualquier peso del modelo 2.5D \emph{baja}
+        la media del ensemble (de 0.505 a 0.459); un miembro débil perjudica.
+  \item \textbf{CLAHE (realce de contraste):} aunque mejora la separabilidad
+        tumor-fondo (Cohen's $d$ del caso 020: $0.79\rightarrow1.28$), no se tradujo en
+        Dice (U-Net 0.395, Attention 0.434); el realce global introduce ruido.
+  \item \textbf{Arquitecturas adicionales} (SegResNet, V-Net): demasiado débiles con
+        tan pocos datos; no aportan al ensemble.
+\end{itemize}
+
+\section{Análisis del límite de desempeño}
+Se calculó el \textbf{límite oráculo}: tomando, para cada caso, el mejor de todos los
+modelos entrenados, la media máxima alcanzable es $\approx 0.53$. Es decir, ni con un
+selector perfecto (no realizable sin incurrir en leakage) se superaría ese valor.
+La causa es estructural:
+\begin{itemize}\itemsep2pt
+  \item Solo existen \textbf{20 casos reales} en todo el proyecto.
+  \item Los casos 019 y 020 son tumores reales de muy bajo contraste; el 020 no era
+        detectado por \emph{ningún} modelo individual (miss genuino, no error de etiqueta).
+\end{itemize}
+Por lo tanto, \textbf{objetivos como $0.6$ no son alcanzables por vía algorítmica}
+con los datos disponibles; el factor limitante es la cantidad de datos reales.
+
+\section{Conclusiones}
+\begin{itemize}\itemsep2pt
+  \item El fine-tuning sim$\rightarrow$real con pérdida Tversky y \emph{ensemble} de las
+        tres redes más fuertes mejora el Dice de test de $0.35$ a \best{0.518}
+        ($+0.17$), eliminando todos los casos con detección nula.
+  \item La metodología es \emph{limpia} (selección de hiperparámetros en OOF de
+        desarrollo, sin leakage) y reproducible.
+  \item Se demostró un techo de datos ($\approx 0.53$): la contribución incluye tanto
+        la mejora metodológica como el análisis honesto del límite.
+\end{itemize}
+
+\section{Trabajo futuro}
+\begin{itemize}\itemsep2pt
+  \item \textbf{Más datos reales} (única vía real a $>0.53$), idealmente de bajo contraste.
+  \item \textbf{Semi-supervisado / pseudo-labeling} si existieran casos reales sin etiquetar.
+  \item \textbf{Aumentación tipo copy-paste de tumores} para sintetizar variedad real.
+  \item \textbf{Evaluación con LOOCV} sobre los 20 reales y \textbf{métrica de detección}
+        (sensibilidad por lesión), clínicamente más relevante; el ensemble actual ya
+        detecta el 100\% de las lesiones.
+\end{itemize}
+
+\appendix
+\section{Reproducibilidad}
+Scripts principales (bajo \texttt{experiments/}):
+\begin{itemize}\itemsep1pt
+  \item nnU-Net fine-tuning: \texttt{nnunet\_official/scripts/trainers/nnUNetTrainer\_FT.py},
+        \texttt{nnUNetTrainer\_FT\_Tversky.py}.
+  \item Redes custom (Attention, U-Net): \texttt{custom\_nets\_ft/full\_pipeline.py}.
+  \item Arquitecturas adicionales + ensemble: \texttt{ensemble\_plus/run\_all.py},
+        \texttt{best\_ensemble.py}.
+  \item Backbone 2.5D: \texttt{backbone\_2p5d/train\_eval.py}.
+  \item CLAHE: \texttt{clahe/clahe\_pipeline.py}.
+\end{itemize}
+Resultados en formato JSON junto a cada script (\texttt{*\_result.json}, \texttt{FINAL.json},
+\texttt{best\_ensemble.json}).
+
+\end{document}

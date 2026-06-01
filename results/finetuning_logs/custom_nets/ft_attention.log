@@ -1,0 +1,33 @@
+=== FT custom net: attention ===
+warm-start Attention_UNet_Dataset_Both | missing=0 unexpected=0
+zero-shot (synthetic ckpt) on real test:
+/home/gabriel/miniconda3/envs/mamai_2/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py:632: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.5 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  return fn(*args, **kwargs)
+/home/gabriel/miniconda3/envs/mamai_2/lib/python3.12/site-packages/torch/utils/checkpoint.py:87: UserWarning: None of the inputs have requires_grad=True. Gradients will be None
+  warnings.warn(
+  mean=0.0050
+  [ft] epoch 1/60 loss=1.0536
+  [ft] epoch 6/60 loss=1.0452
+  [ft] epoch 11/60 loss=0.9490
+  [ft] epoch 16/60 loss=0.8617
+  [ft] epoch 21/60 loss=0.9123
+  [ft] epoch 26/60 loss=0.8561
+  [ft] epoch 31/60 loss=0.7617
+  [ft] epoch 36/60 loss=0.7624
+  [ft] epoch 41/60 loss=0.8003
+  [ft] epoch 46/60 loss=0.7570
+  [ft] epoch 51/60 loss=0.7603
+  [ft] epoch 56/60 loss=0.7382
+  [ft] epoch 60/60 loss=0.7273
+  real_dbt_005: 0.000
+  real_dbt_006: 0.329
+  real_dbt_007: 0.347
+  real_dbt_010: 0.336
+  real_dbt_013: 0.241
+  real_dbt_014: 0.000
+  real_dbt_015: 0.000
+  real_dbt_016: 0.000
+  real_dbt_019: 0.000
+  real_dbt_020: 0.000
+
+attention FT FINAL: mean=0.1254 median=0.0000 zeros=6/10

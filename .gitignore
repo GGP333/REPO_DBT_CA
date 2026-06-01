@@ -26,6 +26,19 @@ ENV/
 
 # Material not used in the manuscript (kept locally only, not versioned)
 _descartado/
+ENSEMBLE_METHODOLOGY.md
+
+# Compiled PDFs and LaTeX build artifacts (regenerable from the .tex sources;
+# note: *.log is intentionally NOT ignored below, it holds training logs)
+*.pdf
+*.aux
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
 
 # --- Heavy artifacts: never commit ---
 # Model weights

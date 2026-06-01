@@ -1,0 +1,106 @@
+=== NET attention: training 5 folds ===
+  fold 0: train 8 / val ['001', '012']
+/home/gabriel/miniconda3/envs/mamai_2/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py:632: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.5 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  return fn(*args, **kwargs)
+/home/gabriel/miniconda3/envs/mamai_2/lib/python3.12/site-packages/torch/utils/checkpoint.py:87: UserWarning: None of the inputs have requires_grad=True. Gradients will be None
+  warnings.warn(
+    [attention-f0] ep 1/120 loss=1.0328
+    [attention-f0] ep 21/120 loss=0.6267
+    [attention-f0] ep 41/120 loss=0.1781
+    [attention-f0] ep 61/120 loss=0.5756
+    [attention-f0] ep 81/120 loss=0.2565
+    [attention-f0] ep 101/120 loss=0.3097
+    [attention-f0] ep 120/120 loss=0.2462
+  fold 1: train 8 / val ['004', '018']
+    [attention-f1] ep 1/120 loss=0.9044
+    [attention-f1] ep 21/120 loss=0.4389
+    [attention-f1] ep 41/120 loss=0.7663
+    [attention-f1] ep 61/120 loss=0.3378
+    [attention-f1] ep 81/120 loss=0.3464
+    [attention-f1] ep 101/120 loss=0.2539
+    [attention-f1] ep 120/120 loss=0.4055
+  fold 2: train 8 / val ['008', '011']
+    [attention-f2] ep 1/120 loss=0.9891
+    [attention-f2] ep 21/120 loss=0.2295
+    [attention-f2] ep 41/120 loss=0.2537
+    [attention-f2] ep 61/120 loss=0.2205
+    [attention-f2] ep 81/120 loss=0.2048
+    [attention-f2] ep 101/120 loss=0.2357
+    [attention-f2] ep 120/120 loss=0.3049
+  fold 3: train 8 / val ['002', '017']
+    [attention-f3] ep 1/120 loss=1.0367
+    [attention-f3] ep 21/120 loss=0.3721
+    [attention-f3] ep 41/120 loss=0.3187
+    [attention-f3] ep 61/120 loss=0.3386
+    [attention-f3] ep 81/120 loss=0.1464
+    [attention-f3] ep 101/120 loss=0.3511
+    [attention-f3] ep 120/120 loss=0.2864
+  fold 4: train 8 / val ['003', '009']
+    [attention-f4] ep 1/120 loss=1.0275
+    [attention-f4] ep 21/120 loss=0.3948
+    [attention-f4] ep 41/120 loss=0.4259
+    [attention-f4] ep 61/120 loss=0.4413
+    [attention-f4] ep 81/120 loss=0.4039
+    [attention-f4] ep 101/120 loss=0.4253
+    [attention-f4] ep 120/120 loss=0.2291
+  attention done
+=== NET unet_bce: training 5 folds ===
+  fold 0: train 8 / val ['001', '012']
+    [unet_bce-f0] ep 1/120 loss=0.7618
+    [unet_bce-f0] ep 21/120 loss=0.2612
+    [unet_bce-f0] ep 41/120 loss=0.1415
+    [unet_bce-f0] ep 61/120 loss=0.1155
+    [unet_bce-f0] ep 81/120 loss=0.0838
+    [unet_bce-f0] ep 101/120 loss=0.0998
+    [unet_bce-f0] ep 120/120 loss=0.0977
+  fold 1: train 8 / val ['004', '018']
+    [unet_bce-f1] ep 1/120 loss=0.8543
+    [unet_bce-f1] ep 21/120 loss=0.1306
+    [unet_bce-f1] ep 41/120 loss=0.0669
+    [unet_bce-f1] ep 61/120 loss=0.0756
+    [unet_bce-f1] ep 81/120 loss=0.1078
+    [unet_bce-f1] ep 101/120 loss=0.0696
+    [unet_bce-f1] ep 120/120 loss=0.0576
+  fold 2: train 8 / val ['008', '011']
+    [unet_bce-f2] ep 1/120 loss=0.9070
+    [unet_bce-f2] ep 21/120 loss=0.1833
+    [unet_bce-f2] ep 41/120 loss=0.0774
+    [unet_bce-f2] ep 61/120 loss=0.1096
+    [unet_bce-f2] ep 81/120 loss=0.0817
+    [unet_bce-f2] ep 101/120 loss=0.0819
+    [unet_bce-f2] ep 120/120 loss=0.1065
+  fold 3: train 8 / val ['002', '017']
+    [unet_bce-f3] ep 1/120 loss=0.8076
+    [unet_bce-f3] ep 21/120 loss=0.2247
+    [unet_bce-f3] ep 41/120 loss=0.1548
+    [unet_bce-f3] ep 61/120 loss=0.0655
+    [unet_bce-f3] ep 81/120 loss=0.1118
+    [unet_bce-f3] ep 101/120 loss=0.0576
+    [unet_bce-f3] ep 120/120 loss=0.0896
+  fold 4: train 8 / val ['003', '009']
+    [unet_bce-f4] ep 1/120 loss=0.7069
+    [unet_bce-f4] ep 21/120 loss=0.1467
+    [unet_bce-f4] ep 41/120 loss=0.0655
+    [unet_bce-f4] ep 61/120 loss=0.1056
+    [unet_bce-f4] ep 81/120 loss=0.1003
+    [unet_bce-f4] ep 101/120 loss=0.0983
+    [unet_bce-f4] ep 120/120 loss=0.1253
+  unet_bce done
+
+=== selecting ensemble on OOF dev ===
+MEJOR en DEV: media=0.5628  w=(2, 1, 2) thr=0.3 largest=True
+
+=== TEST (ensemble seleccionado en dev) ===
+  real_dbt_005: 0.793
+  real_dbt_006: 0.653
+  real_dbt_007: 0.498
+  real_dbt_010: 0.766
+  real_dbt_013: 0.591
+  real_dbt_014: 0.526
+  real_dbt_015: 0.648
+  real_dbt_016: 0.676
+  real_dbt_019: 0.000
+  real_dbt_020: 0.000
+=> media=0.5151  mediana=0.6199  ceros=2/10
+   (nnU-Net solo: 0.505)
+SAVED full_ensemble_result.json
