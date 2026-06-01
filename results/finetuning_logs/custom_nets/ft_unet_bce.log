@@ -1,5 +1,5 @@
 === FT custom net: unet_bce ===
-warm-start UNet_BCE_Dataset_Both | missing=0 unexpected=0
+warm-start UNet_BCE_Dataset_Mixed_Size | missing=0 unexpected=0
 zero-shot (synthetic ckpt) on real test:
   mean=0.0722
   [ft] epoch 1/120 loss=0.7623

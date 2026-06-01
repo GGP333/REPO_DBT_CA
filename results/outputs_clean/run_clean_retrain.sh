@@ -7,7 +7,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate mamai_2
 export PYTHONPATH="src/models/unet_bce/src:src/shared"
 
-DATASETS=(small_tumor large_tumor Both)
+DATASETS=(small_tumor large_tumor Mixed_Size)
 
 for ds in "${DATASETS[@]}"; do
   out="outputs_clean/UNet_BCE_Dataset_${ds}"

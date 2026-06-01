@@ -7,7 +7,7 @@ Uso:
     python run_test_trainings.py
     python run_test_trainings.py --epochs 5  # cambiar épocas
     python run_test_trainings.py --models nnUnet_original  # solo un modelo
-    python run_test_trainings.py --datasets Dataset_Both_RealWorld Dataset_Both  # solo algunos datasets
+    python run_test_trainings.py --datasets Dataset_Hybrid Dataset_Mixed_Size  # solo algunos datasets
 """
 from __future__ import annotations
 
@@ -45,8 +45,8 @@ MODELS = [
 
 # Datasets preprocesados disponibles
 DATASETS = [
-    "Dataset_Both_RealWorld",
-    "Dataset_Both",
+    "Dataset_Hybrid",
+    "Dataset_Mixed_Size",
     "Dataset_small_tumor",
     "Dataset_large_tumor",
 ]

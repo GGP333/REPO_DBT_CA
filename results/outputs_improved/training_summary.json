@@ -8,11 +8,11 @@
   "results": [
     {
       "model": "nnUnet_original",
-      "dataset": "Dataset_Both_RealWorld",
+      "dataset": "Dataset_Hybrid",
       "status": "\u2705 SUCCESS",
       "elapsed_seconds": 44183.48365998268,
       "error": null,
-      "output_dir": "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/nnUnet_original_Dataset_Both_RealWorld",
+      "output_dir": "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/nnUnet_original_Dataset_Hybrid",
       "metrics": {
         "val_dice": 0.7770307253239731,
         "val_iou": 0.6755150032211292,
@@ -23,11 +23,11 @@
     },
     {
       "model": "Attention_UNet",
-      "dataset": "Dataset_Both_RealWorld",
+      "dataset": "Dataset_Hybrid",
       "status": "\u2705 SUCCESS",
       "elapsed_seconds": 24838.58766412735,
       "error": null,
-      "output_dir": "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_Both_RealWorld",
+      "output_dir": "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/Attention_UNet_Dataset_Hybrid",
       "metrics": {
         "val_dice": 0.5838038283296506,
         "val_iou": 0.457897745657418,
@@ -38,11 +38,11 @@
     },
     {
       "model": "UNet_BCE",
-      "dataset": "Dataset_Both_RealWorld",
+      "dataset": "Dataset_Hybrid",
       "status": "\u2705 SUCCESS",
       "elapsed_seconds": 11140.155985116959,
       "error": null,
-      "output_dir": "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/UNet_BCE_Dataset_Both_RealWorld",
+      "output_dir": "/home/gabriel/Escritorio/CRISTINA ALFARO FINALE/outputs_improved/UNet_BCE_Dataset_Hybrid",
       "metrics": {
         "val_dice": 0.7316659896029378,
         "val_iou": 0.6325328872677229,

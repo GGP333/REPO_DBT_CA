@@ -9,8 +9,8 @@ SRC_ROOT = REPO_ROOT / "Dataset_Preprocessed"
 DATASETS = {
     1: {"name": "DBTLarge",          "src": SRC_ROOT / "Dataset_large_tumor"},
     2: {"name": "DBTSmall",          "src": SRC_ROOT / "Dataset_small_tumor"},
-    3: {"name": "DBTBoth",           "src": SRC_ROOT / "Dataset_Both"},
-    4: {"name": "DBTBothRealWorld",  "src": SRC_ROOT / "Dataset_Both_RealWorld"},
+    3: {"name": "DBTMixedSize",           "src": SRC_ROOT / "Dataset_Mixed_Size"},
+    4: {"name": "DBTHybrid",  "src": SRC_ROOT / "Dataset_Hybrid"},
 }
 
 

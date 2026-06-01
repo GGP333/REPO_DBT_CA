@@ -37,8 +37,8 @@ RAW_ROOT = BASE_DIR / "Dataset"
 PREP_ROOT = BASE_DIR / "Dataset_Preprocessed"
 
 SUBDATASETS = [
-    "Dataset_Both_RealWorld",
-    "Dataset_Both",
+    "Dataset_Hybrid",
+    "Dataset_Mixed_Size",
     "Dataset_small_tumor",
     "Dataset_large_tumor",
 ]

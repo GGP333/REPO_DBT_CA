@@ -1,6 +1,6 @@
 # configs/config.yaml
 # Edit dataset_root to point to your preprocessed dataset
-dataset_root: "data/preprocessed/Dataset_Both_RealWorld"
+dataset_root: "data/preprocessed/Dataset_Hybrid"
 
 seed: 42
 val_ratio: 0.2

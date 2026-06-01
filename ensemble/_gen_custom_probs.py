@@ -2,7 +2,7 @@
 desde los modelos 5-fold guardados, para reproducir el ensemble sin reentrenar."""
 import os, glob, importlib.util, numpy as np, torch
 REPO=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA=os.environ.get("DBT_DATA",f"{REPO}/data/Dataset_Preprocessed/Dataset_Both_RealWorld")
+DATA=os.environ.get("DBT_DATA",f"{REPO}/data/Dataset_Preprocessed/Dataset_Hybrid")
 DEV=torch.device("cuda" if torch.cuda.is_available() else "cpu")
 FOLDS={0:["001","012"],1:["004","018"],2:["008","011"],3:["002","017"],4:["003","009"]}
 DEVIDS=[c for v in FOLDS.values() for c in v]

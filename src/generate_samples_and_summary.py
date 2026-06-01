@@ -351,7 +351,7 @@ def update_training_summary():
         results.append(entry)
 
     # Sort: nnUnet first, then Attention, then BCE; within each by dataset order
-    ds_order = ["Dataset_Both_RealWorld", "Dataset_Both", "Dataset_small_tumor", "Dataset_large_tumor"]
+    ds_order = ["Dataset_Hybrid", "Dataset_Mixed_Size", "Dataset_small_tumor", "Dataset_large_tumor"]
     model_order = ["nnUnet_original", "Attention_UNet", "UNet_BCE"]
 
     def sort_key(r):

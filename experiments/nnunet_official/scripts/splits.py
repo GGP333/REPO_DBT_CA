@@ -8,7 +8,7 @@ used during the original experiments:
     test_ratio  = 0.1
     seed        = 42
 
-Special case (Dataset_Both_RealWorld):
+Special case (Dataset_Hybrid):
     test = first 50% of real_dbt_* after shuffle (seed=42)
     train/val = (synth dbt_* + remaining real_dbt_*) shuffled, 80/20.
 """

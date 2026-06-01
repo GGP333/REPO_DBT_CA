@@ -50,7 +50,7 @@ regular `real_dbt_019` (0.050, tumor de muy bajo contraste).
 |---|---|
 | `nnunet_ft_curves.png` | **fine-tuning de nnU-Net** (miembro principal): train_loss, val_loss y val pseudo-Dice por época, media ± std de los 5 folds (Tversky+CE, sim→real) |
 | `nnunet_ft_per_epoch.csv` | los mismos valores por época (media/std de folds) |
-| `base_attention_curves.png` | entrenamiento **base sintético** de Attention U-Net ('Both', warm-start): train_loss + val Dice/IoU/Precision/Recall |
+| `base_attention_curves.png` | entrenamiento **base sintético** de Attention U-Net ('Mixed_Size', warm-start): train_loss + val Dice/IoU/Precision/Recall |
 | `base_unet_bce_curves.png`  | ídem para U-Net BCE |
 
 > Nota: las curvas de validación **por época** solo existen para el fine-tuning de nnU-Net

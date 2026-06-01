@@ -77,7 +77,7 @@ def split_records(records: List[StudyRecord],
     """
     Split de records en train/val/test.
     
-    CASO ESPECIAL (Dataset_Both_RealWorld):
+    CASO ESPECIAL (Dataset_Hybrid):
     - Test: 50% de real_dbt_* (solo datos reales)
     - Train/Val: dbt_* + 50% restante de real_dbt_* (mezclados)
     """

@@ -18,7 +18,7 @@ SEED = 42
 random.seed(SEED); np.random.seed(SEED); torch.manual_seed(SEED); torch.cuda.manual_seed_all(SEED)
 DEV = torch.device("cuda")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # raíz del repo
-DATA = f"{ROOT}/data/Dataset_Preprocessed/Dataset_Both_RealWorld"
+DATA = f"{ROOT}/data/Dataset_Preprocessed/Dataset_Hybrid"
 OUT  = f"{ROOT}/models/custom_5fold"
 NNU  = f"{ROOT}/data_probs"
 TVT  = f"{NNU}/nnunet_test"        # nnU-Net test probs (key 'probabilities')
@@ -31,10 +31,10 @@ TEST_IDS = ["005","006","007","010","013","014","015","016","019","020"]
 NETS = {
   "attention": dict(file=f"{ROOT}/src/models/attention_unet3d.py", cls="AttentionUNet3D",
                     kw=dict(in_ch=1,base_ch=32,levels=4,use_checkpointing=True),
-                    ckpt=f"{ROOT}/models/synthetic_base/Attention_UNet_Both_best.pt"),
+                    ckpt=f"{ROOT}/models/synthetic_base/Attention_UNet_Mixed_Size_best.pt"),
   "unet_bce": dict(file=f"{ROOT}/src/models/unet3d.py", cls="UNet3D",
                    kw=dict(in_ch=1,base_ch=32,levels=4),
-                   ckpt=f"{ROOT}/models/synthetic_base/UNet_BCE_Both_best.pt"),
+                   ckpt=f"{ROOT}/models/synthetic_base/UNet_BCE_Mixed_Size_best.pt"),
 }
 
 def npy(cid,k): return np.load(f"{DATA}/real_dbt_{cid}/real_dbt_{cid}_{k}.npy").astype(np.float32)

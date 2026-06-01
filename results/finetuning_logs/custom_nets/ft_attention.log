@@ -1,5 +1,5 @@
 === FT custom net: attention ===
-warm-start Attention_UNet_Dataset_Both | missing=0 unexpected=0
+warm-start Attention_UNet_Dataset_Mixed_Size | missing=0 unexpected=0
 zero-shot (synthetic ckpt) on real test:
 /home/gabriel/miniconda3/envs/mamai_2/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py:632: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.5 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
   return fn(*args, **kwargs)

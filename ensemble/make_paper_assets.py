@@ -355,8 +355,8 @@ def nnunet_train_val_loss():
     import glob as _glob
     DS = [("Large tumor", "Dataset001_DBTLarge"),
           ("Small tumor", "Dataset002_DBTSmall"),
-          ("Mixed-size", "Dataset003_DBTBoth"),
-          ("Hybrid synthetic-clinical", "Dataset004_DBTBothRealWorld")]
+          ("Mixed-size", "Dataset003_DBTMixedSize"),
+          ("Hybrid synthetic-clinical", "Dataset004_DBTHybrid")]
     base = f"{REPO}/experiments/nnunet_official/nnunet_root/results"
     fig, axs = plt.subplots(2, 2, figsize=(11, 7.2)); axs = axs.ravel()
     wrote_csv = open(f"{OUT}/curves/nnunet_train_val_loss_per_epoch.csv", "w", newline="")
@@ -396,8 +396,8 @@ def all_arch_train_val_curves():
     import glob as _glob
     DSETS = [("Large tumor", "large_tumor", "Dataset001_DBTLarge"),
              ("Small tumor", "small_tumor", "Dataset002_DBTSmall"),
-             ("Mixed-size",  "Both",        "Dataset003_DBTBoth"),
-             ("Hybrid",      "Both_RealWorld", "Dataset004_DBTBothRealWorld")]
+             ("Mixed-size",  "Mixed_Size",        "Dataset003_DBTMixedSize"),
+             ("Hybrid",      "Hybrid", "Dataset004_DBTHybrid")]
     # rutas de metrics.csv de las redes custom en el repo
     def custom_csv(net, key):
         cands = [f"{REPO}/results/outputs_clean/{net}_Dataset_{key}/logs/metrics.csv",
@@ -455,10 +455,10 @@ def all_arch_train_val_curves():
     return p
 
 def base_curves():
-    """Curvas train/val del entrenamiento base sintético (Both) de Attention y U-Net BCE."""
+    """Curvas train/val del entrenamiento base sintético (Mixed_Size) de Attention y U-Net BCE."""
     srcs = {
-        "Attention U-Net": f"{REPO}/results/outputs_improved/Attention_UNet_Dataset_Both/logs/metrics.csv",
-        "U-Net BCE":       f"{REPO}/results/outputs_clean/UNet_BCE_Dataset_Both/logs/metrics.csv",
+        "Attention U-Net": f"{REPO}/results/outputs_improved/Attention_UNet_Dataset_Mixed_Size/logs/metrics.csv",
+        "U-Net BCE":       f"{REPO}/results/outputs_clean/UNet_BCE_Dataset_Mixed_Size/logs/metrics.csv",
     }
     made = []
     for name, path in srcs.items():
@@ -479,7 +479,7 @@ def base_curves():
         ax2.set_ylabel("Validation metric"); ax2.set_ylim(0, 1)
         h1, l1 = ax1.get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
         ax1.legend(h1+h2, l1+l2, loc="center right", fontsize=8)
-        ax1.set_title(f"{name} — base training on synthetic 'Both' (warm-start source)")
+        ax1.set_title(f"{name} — base training on synthetic 'Mixed_Size' (warm-start source)")
         ax1.grid(ls=":", alpha=0.5); fig.tight_layout()
         tag = "attention" if "Attention" in name else "unet_bce"
         p = f"{OUT}/curves/base_{tag}_curves.png"

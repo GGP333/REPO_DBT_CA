@@ -7,7 +7,7 @@
 ===================================================================
 [2026-05-28 18:35:09] DONE  large_tumor  (exit=0)
 ===================================================================
-[2026-05-28 18:35:09] START Both  -> outputs_clean/UNet_BCE_Dataset_Both
+[2026-05-28 18:35:09] START Mixed_Size  -> outputs_clean/UNet_BCE_Dataset_Mixed_Size
 ===================================================================
-[2026-05-28 21:15:43] DONE  Both  (exit=0)
+[2026-05-28 21:15:43] DONE  Mixed_Size  (exit=0)
 [2026-05-28 21:15:43] TODOS LOS DATASETS COMPLETADOS

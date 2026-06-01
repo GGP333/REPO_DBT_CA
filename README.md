@@ -58,12 +58,12 @@ Four datasets are defined from the preprocessed set:
 |---------|-------------|:---:|:---:|:---:|:---:|:---:|
 | **Dataset_large_tumor** | Only large tumors (high fg/bg ratio) | 90 | 90 | 72 | 18 | 8 |
 | **Dataset_small_tumor** | Only small tumors (low fg/bg ratio) | 30 | 30 | 24 | 6 | 3 |
-| **Dataset_Both** | Mixture of large and small tumors (90 large + 30 small) | 120 | 120 | 96 | 24 | 11 |
-| **Dataset_Both_RealWorld** | `dbt_*` + `real_dbt_*` (real clinical data) | 140 | 140 | ~104 | ~26 | 10 (real_dbt_*) |
+| **Dataset_Mixed_Size** | Mixture of large and small tumors (90 large + 30 small) | 120 | 120 | 96 | 24 | 11 |
+| **Dataset_Hybrid** | `dbt_*` + `real_dbt_*` (real clinical data) | 140 | 140 | ~104 | ~26 | 10 (real_dbt_*) |
 
-**Note on Train/Val/Test splits**: the values in the table correspond to the split used by UNet_BCE and Attention U-Net (80/20 train/val). nnUNet uses a slightly different split (e.g., 65/16/8 on large_tumor, 87/22/11 on Both). In both cases, the test set is the same (8, 3, 11 studies respectively) and is evaluated with the best checkpoint.
+**Note on Train/Val/Test splits**: the values in the table correspond to the split used by UNet_BCE and Attention U-Net (80/20 train/val). nnUNet uses a slightly different split (e.g., 65/16/8 on large_tumor, 87/22/11 on Mixed_Size). In both cases, the test set is the same (8, 3, 11 studies respectively) and is evaluated with the best checkpoint.
 
-**Note on Dataset_Both_RealWorld**: the directory contains 140 studies (120 `dbt_*` + 20 `real_dbt_*`). The test set is built with **50% of the `real_dbt_*`** (10 real clinical studies). The remaining 50% of `real_dbt_*` is mixed with the `dbt_*` to form train/val. This allows the model to learn from real and synthetic data, and to be evaluated exclusively on unseen real clinical data.
+**Note on Dataset_Hybrid**: the directory contains 140 studies (120 `dbt_*` + 20 `real_dbt_*`). The test set is built with **50% of the `real_dbt_*`** (10 real clinical studies). The remaining 50% of `real_dbt_*` is mixed with the `dbt_*` to form train/val. This allows the model to learn from real and synthetic data, and to be evaluated exclusively on unseen real clinical data.
 
 ### 2.3 Train/val/test split
 
@@ -223,12 +223,12 @@ trained separately with nnU-Netv2 (1000 epochs) and is not included in this tabl
 
 | Model | Dataset | Time |
 |--------|---------|--------|
-| Attention_UNet | Both_RealWorld | 5.7h |
-| Attention_UNet | Both | 5.7h |
+| Attention_UNet | Hybrid | 5.7h |
+| Attention_UNet | Mixed_Size | 5.7h |
 | Attention_UNet | small_tumor | 1.4h |
 | Attention_UNet | large_tumor | 4.3h |
-| UNet_BCE | Both_RealWorld | 2.8h |
-| UNet_BCE | Both | 2.8h |
+| UNet_BCE | Hybrid | 2.8h |
+| UNet_BCE | Mixed_Size | 2.8h |
 | UNet_BCE | small_tumor | 0.7h |
 | UNet_BCE | large_tumor | 2.1h |
 | **Total (in-house models)** | | **~25.5h** |
@@ -272,7 +272,7 @@ Twelve segmentation metrics are computed for each experiment. All metrics are ev
 
 These are the numbers reported in the manuscript. **nnU-Net** = official nnU-Netv2
 (`nnUNetTrainer_Seeded42`); **3D U-Net (baseline)** = U-Net BCE; **Attention U-Net** =
-Attention U-Net 3D. For U-Net BCE on Large / Small / Both these are the **leakage-free
+Attention U-Net 3D. For U-Net BCE on Large / Small / Mixed_Size these are the **leakage-free
 re-trained** runs (`results/outputs_clean/`); see `docs/data_leakage_audit.md`. All metrics
 use the best checkpoint.
 
@@ -285,16 +285,16 @@ stores only these two natively).
 |--------|---------|:----:|:---:|
 | nnU-Net | large_tumor | 0.8922 | 0.8081 |
 | nnU-Net | small_tumor | 0.7358 | 0.6208 |
-| nnU-Net | Both | 0.7716 | 0.6746 |
-| nnU-Net | Both_RealWorld | 0.7308 | 0.6428 |
+| nnU-Net | Mixed_Size | 0.7716 | 0.6746 |
+| nnU-Net | Hybrid | 0.7308 | 0.6428 |
 | 3D U-Net (baseline) | large_tumor | 0.7873 | 0.6591 |
 | 3D U-Net (baseline) | small_tumor | 0.5361 | 0.3931 |
-| 3D U-Net (baseline) | Both | 0.7003 | 0.5895 |
-| 3D U-Net (baseline) | Both_RealWorld | 0.7317 | 0.6325 |
+| 3D U-Net (baseline) | Mixed_Size | 0.7003 | 0.5895 |
+| 3D U-Net (baseline) | Hybrid | 0.7317 | 0.6325 |
 | Attention U-Net | large_tumor | 0.6597 | 0.5138 |
 | Attention U-Net | small_tumor | 0.3924 | 0.2740 |
-| Attention U-Net | Both | 0.4799 | 0.3663 |
-| Attention U-Net | Both_RealWorld | 0.5838 | 0.4579 |
+| Attention U-Net | Mixed_Size | 0.4799 | 0.3663 |
+| Attention U-Net | Hybrid | 0.5838 | 0.4579 |
 
 ### 6.2 Test metrics (best checkpoint)
 
@@ -302,16 +302,16 @@ stores only these two natively).
 |--------|---------|:----:|:---:|:---------:|:------:|:----:|:--:|:---:|
 | nnU-Net | large_tumor | 0.8641 | 0.7661 | 0.8828 | 0.8612 | 48.50 | 0.7569 | 0.4639 |
 | nnU-Net | small_tumor | 0.5602 | 0.4758 | 0.6739 | 0.5739 | 34.37 | 0.4592 | 0.2133 |
-| nnU-Net | Both | 0.8414 | 0.7372 | 0.8942 | 0.8082 | 2.17 | 0.7241 | 0.4151 |
-| nnU-Net | Both_RealWorld | 0.3525 | 0.2786 | 0.5862 | 0.3647 | 141.22 | 0.2700 | 0.0761 |
+| nnU-Net | Mixed_Size | 0.8414 | 0.7372 | 0.8942 | 0.8082 | 2.17 | 0.7241 | 0.4151 |
+| nnU-Net | Hybrid | 0.3525 | 0.2786 | 0.5862 | 0.3647 | 141.22 | 0.2700 | 0.0761 |
 | 3D U-Net (baseline) | large_tumor | 0.8295 | 0.7167 | 0.8410 | 0.8462 | 3.46 | 0.8769 | 0.4689 |
 | 3D U-Net (baseline) | small_tumor | 0.2635 | 0.1979 | 0.2337 | 0.3319 | 40.00 | 0.2655 | 0.0945 |
-| 3D U-Net (baseline) | Both | 0.7264 | 0.6084 | 0.7282 | 0.7383 | 18.07 | 0.7536 | 0.3308 |
-| 3D U-Net (baseline) | Both_RealWorld | 0.4116 | 0.2982 | 0.5416 | 0.4731 | 81.15 | 0.3959 | 0.0638 |
+| 3D U-Net (baseline) | Mixed_Size | 0.7264 | 0.6084 | 0.7282 | 0.7383 | 18.07 | 0.7536 | 0.3308 |
+| 3D U-Net (baseline) | Hybrid | 0.4116 | 0.2982 | 0.5416 | 0.4731 | 81.15 | 0.3959 | 0.0638 |
 | Attention U-Net | large_tumor | 0.7776 | 0.6434 | 0.7661 | 0.8124 | 29.78 | 0.7028 | 0.2529 |
 | Attention U-Net | small_tumor | 0.3670 | 0.2692 | 0.3047 | 0.5045 | 53.90 | 0.2795 | 0.0405 |
-| Attention U-Net | Both | 0.5823 | 0.4334 | 0.6036 | 0.6458 | 54.42 | 0.4564 | 0.0888 |
-| Attention U-Net | Both_RealWorld | 0.4207 | 0.2941 | 0.4098 | 0.4879 | 68.66 | 0.2965 | 0.0174 |
+| Attention U-Net | Mixed_Size | 0.5823 | 0.4334 | 0.6036 | 0.6458 | 54.42 | 0.4564 | 0.0888 |
+| Attention U-Net | Hybrid | 0.4207 | 0.2941 | 0.4098 | 0.4879 | 68.66 | 0.2965 | 0.0174 |
 
 Per-case test results for the official nnU-Net live in
 `experiments/nnunet_official/eval/results_Dataset00*__nnUNetTrainer_Seeded42.json`; for the
@@ -361,8 +361,8 @@ Paper_DBT/
 |       |-- eval/                     # results_Dataset00*__nnUNetTrainer_Seeded42.json (test)
 |
 |-- results/
-|   |-- outputs_clean/                # UNet_BCE leakage-free re-trains (Large/Small/Both)
-|   |-- outputs_improved/             # Attention_UNet (4 datasets) + UNet_BCE Both_RealWorld
+|   |-- outputs_clean/                # UNet_BCE leakage-free re-trains (Large/Small/Mixed_Size)
+|   |-- outputs_improved/             # Attention_UNet (4 datasets) + UNet_BCE Hybrid
 |   |-- figures/                      # training_curves_<dataset>.png (per-dataset loss curves)
 |
 |-- docs/
@@ -470,7 +470,7 @@ Training-loss curves (one figure per dataset, three panels: 3D U-Net / nnU-Net /
 U-Net) are written to `results/figures/`:
 
 ```bash
-python src/plot_training_curves.py --datasets large_tumor small_tumor Both Both_RealWorld
+python src/plot_training_curves.py --datasets large_tumor small_tumor Mixed_Size Hybrid
 ```
 
 Curve sources match the reported runs: the official **nnU-Net** loss is read from its

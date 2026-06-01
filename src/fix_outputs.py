@@ -3,7 +3,7 @@
 Post-processing script to fix outputs_improved/ results WITHOUT retraining.
 
 Fixes:
-  1. Trim overlapping experiment data in nnUnet_original_Dataset_Both_RealWorld
+  1. Trim overlapping experiment data in nnUnet_original_Dataset_Hybrid
   2. Re-evaluate ALL experiments with complete metrics (12 metrics)
   3. Run test evaluation for UNet_BCE (4 experiments missing test_metrics)
   4. Generate sample PNGs for experiments missing them
@@ -37,16 +37,16 @@ DATASET_PREPROCESSED = ROOT / "Dataset_Preprocessed"
 
 # All 12 experiment names
 EXPERIMENTS = [
-    "nnUnet_original_Dataset_Both_RealWorld",
-    "nnUnet_original_Dataset_Both",
+    "nnUnet_original_Dataset_Hybrid",
+    "nnUnet_original_Dataset_Mixed_Size",
     "nnUnet_original_Dataset_small_tumor",
     "nnUnet_original_Dataset_large_tumor",
-    "Attention_UNet_Dataset_Both_RealWorld",
-    "Attention_UNet_Dataset_Both",
+    "Attention_UNet_Dataset_Hybrid",
+    "Attention_UNet_Dataset_Mixed_Size",
     "Attention_UNet_Dataset_small_tumor",
     "Attention_UNet_Dataset_large_tumor",
-    "UNet_BCE_Dataset_Both_RealWorld",
-    "UNet_BCE_Dataset_Both",
+    "UNet_BCE_Dataset_Hybrid",
+    "UNet_BCE_Dataset_Mixed_Size",
     "UNet_BCE_Dataset_small_tumor",
     "UNet_BCE_Dataset_large_tumor",
 ]
@@ -59,8 +59,8 @@ MODEL_DIRS = {
 }
 
 DATASETS = [
-    "Dataset_Both_RealWorld",
-    "Dataset_Both",
+    "Dataset_Hybrid",
+    "Dataset_Mixed_Size",
     "Dataset_small_tumor",
     "Dataset_large_tumor",
 ]
@@ -587,7 +587,7 @@ def main():
     print("=" * 70)
     print("STEP 1: Trim overlapping experiment data")
     print("=" * 70)
-    overlap_exp = "nnUnet_original_Dataset_Both_RealWorld"
+    overlap_exp = "nnUnet_original_Dataset_Hybrid"
     if overlap_exp in experiments:
         exp_dir = OUTPUTS / overlap_exp
         if exp_dir.exists():

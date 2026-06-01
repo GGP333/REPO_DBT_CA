@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Re-entrena UNet_BCE en Large/Small/Both con splits limpios (test = imagesTs).
+# Re-entrena UNet_BCE en Large/Small/Mixed_Size con splits limpios (test = imagesTs).
 # Outputs en /home/gabriel/Escritorio/Paper_DBT/outputs_clean/UNet_BCE_Dataset_<short>/
 set -euo pipefail
 
@@ -15,7 +15,7 @@ cd $ROOT/src/models/unet_bce/src
 for spec in \
     "small_tumor:Dataset_small_tumor" \
     "large_tumor:Dataset_large_tumor" \
-    "Both:Dataset_Both" ; do
+    "Mixed_Size:Dataset_Mixed_Size" ; do
     short="${spec%:*}"
     folder="${spec#*:}"
     out="$OUT_BASE/UNet_BCE_Dataset_${short}"

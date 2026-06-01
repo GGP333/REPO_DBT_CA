@@ -806,7 +806,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument(
         "--case_relpath",
         type=str,
-        help="Ruta relativa del caso dentro del output_subdir (ej: Dataset_Both/dbt_001).",
+        help="Ruta relativa del caso dentro del output_subdir (ej: Dataset_Mixed_Size/dbt_001).",
     )
     p.add_argument("--mask_dir", type=Path, help="Carpeta con la máscara de hallazgo (.tif/.tiff). Si se omite, se busca mask_* junto a input_dir.")
     p.add_argument("--spacing", nargs=3, type=float, help="Espaciado original (sx sy sz) en mm si no hay metadata.")

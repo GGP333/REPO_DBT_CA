@@ -3,7 +3,7 @@
 Ejecuta preprocess_simple.py sobre todos los estudios dbt_* / real_dbt_* en un dataset.
 
 Uso:
-    python scripts/run_preprocess_simple.py --dataset_root Dataset/Dataset_Both_RealWorld --jobs 4
+    python scripts/run_preprocess_simple.py --dataset_root Dataset/Dataset_Hybrid --jobs 4
 """
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ def parse_args() -> argparse.Namespace:
         "--dataset_root",
         type=Path,
         required=True,
-        help="Carpeta del dataset (ej: Dataset/Dataset_Both_RealWorld)",
+        help="Carpeta del dataset (ej: Dataset/Dataset_Hybrid)",
     )
     p.add_argument(
         "--output_root",
@@ -105,7 +105,7 @@ def main() -> None:
         raise FileNotFoundError(f"No se encuentra dataset_root: {dataset_root}")
 
     output_root = Path(args.output_root)
-    dataset_name = dataset_root.name  # ej: Dataset_Both_RealWorld
+    dataset_name = dataset_root.name  # ej: Dataset_Hybrid
     normalize = args.normalize
 
     # Buscar estudios

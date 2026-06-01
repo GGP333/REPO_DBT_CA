@@ -29,21 +29,21 @@ COLOR = "#1f77b4"
 NNUNET_DS = {
     "large_tumor": "Dataset001_DBTLarge",
     "small_tumor": "Dataset002_DBTSmall",
-    "Both": "Dataset003_DBTBoth",
-    "Both_RealWorld": "Dataset004_DBTBothRealWorld",
+    "Mixed_Size": "Dataset003_DBTMixedSize",
+    "Hybrid": "Dataset004_DBTHybrid",
 }
 PRETTY = {
     "large_tumor": "Large tumor",
     "small_tumor": "Small tumor",
-    "Both": "Mixed-size tumor",
-    "Both_RealWorld": "Hybrid synthetic-clinical",
+    "Mixed_Size": "Mixed-size tumor",
+    "Hybrid": "Hybrid synthetic-clinical",
 }
 
 
 def unet_bce_dir(ds: str) -> Path:
-    # Both_RealWorld was already leakage-free (outputs_improved); the other three
+    # Hybrid was already leakage-free (outputs_improved); the other three
     # use the leakage-free re-trains in outputs_clean.
-    base = "outputs_improved" if ds == "Both_RealWorld" else "outputs_clean"
+    base = "outputs_improved" if ds == "Hybrid" else "outputs_clean"
     return REPO / "results" / base / f"UNet_BCE_Dataset_{ds}"
 
 
@@ -117,7 +117,7 @@ def make_figure(ds: str, out_path: Path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--datasets", nargs="+", default=["Both_RealWorld"],
+    ap.add_argument("--datasets", nargs="+", default=["Hybrid"],
                     choices=list(NNUNET_DS))
     ap.add_argument("--out_dir", default=str(REPO / "results" / "figures"))
     args = ap.parse_args()

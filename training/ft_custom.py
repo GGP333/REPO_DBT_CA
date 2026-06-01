@@ -2,7 +2,7 @@
 Sim->real fine-tuning for the custom 3D nets (Attention U-Net, U-Net BCE),
 mirroring the validated nnU-Net pipeline.
 
-  warm-start from the SYNTHETIC 'Both' checkpoint  ->  fine-tune on 10 real dev
+  warm-start from the SYNTHETIC 'Mixed_Size' checkpoint  ->  fine-tune on 10 real dev
   cases (Tversky loss, low LR)  ->  evaluate per-case 3D Dice on 10 real test.
 
 Models output PROBABILITIES (sigmoid inside), so losses operate on probs.
@@ -18,17 +18,17 @@ SEED = 42
 random.seed(SEED); np.random.seed(SEED); torch.manual_seed(SEED); torch.cuda.manual_seed_all(SEED)
 DEV = torch.device("cuda")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # raíz del repo
-DATA = f"{ROOT}/data/Dataset_Preprocessed/Dataset_Both_RealWorld"   # per-case real .npy
+DATA = f"{ROOT}/data/Dataset_Preprocessed/Dataset_Hybrid"   # per-case real .npy
 DEV_IDS  = ["001","002","003","004","008","009","011","012","017","018"]
 TEST_IDS = ["005","006","007","010","013","014","015","016","019","020"]
 
 CFG = {
     "attention": dict(file=f"{ROOT}/src/models/attention_unet3d.py",
                       cls="AttentionUNet3D", kw=dict(in_ch=1, base_ch=32, levels=4, use_checkpointing=True),
-                      ckpt=f"{ROOT}/models/synthetic_base/Attention_UNet_Both_best.pt"),
+                      ckpt=f"{ROOT}/models/synthetic_base/Attention_UNet_Mixed_Size_best.pt"),
     "unet_bce": dict(file=f"{ROOT}/src/models/unet3d.py",
                      cls="UNet3D", kw=dict(in_ch=1, base_ch=32, levels=4),
-                     ckpt=f"{ROOT}/models/synthetic_base/UNet_BCE_Both_best.pt"),
+                     ckpt=f"{ROOT}/models/synthetic_base/UNet_BCE_Mixed_Size_best.pt"),
 }[NET]
 
 def load_model():

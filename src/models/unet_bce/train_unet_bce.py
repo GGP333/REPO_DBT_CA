@@ -238,7 +238,7 @@ def main():
             import traceback
             traceback.print_exc()
         
-        # Evaluar en test si existe (real_dbt_* en Dataset_Both_RealWorld)
+        # Evaluar en test si existe (real_dbt_* en Dataset_Hybrid)
         if test_loader is not None:
             try:
                 test_preds_dir = out_root / "test_preds_npy"
