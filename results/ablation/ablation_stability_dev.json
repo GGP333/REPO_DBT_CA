@@ -1,0 +1,69 @@
+{
+  "n_bootstrap": 1000,
+  "seed": 42,
+  "declared": {
+    "weights": "2:2:3",
+    "threshold": 0.3,
+    "bootstrap_win_frac": 0.526,
+    "bootstrap_top5pct_frac": 0.611,
+    "median_bootstrap_rank": 1.0
+  },
+  "leave_one_out": [
+    {
+      "left_out": "real_dbt_001",
+      "selected_weights": "2:2:3",
+      "selected_threshold": 0.3
+    },
+    {
+      "left_out": "real_dbt_002",
+      "selected_weights": "2:2:3",
+      "selected_threshold": 0.3
+    },
+    {
+      "left_out": "real_dbt_003",
+      "selected_weights": "2:2:3",
+      "selected_threshold": 0.3
+    },
+    {
+      "left_out": "real_dbt_004",
+      "selected_weights": "1:2:1",
+      "selected_threshold": 0.6
+    },
+    {
+      "left_out": "real_dbt_008",
+      "selected_weights": "2:2:3",
+      "selected_threshold": 0.3
+    },
+    {
+      "left_out": "real_dbt_009",
+      "selected_weights": "2:2:3",
+      "selected_threshold": 0.3
+    },
+    {
+      "left_out": "real_dbt_011",
+      "selected_weights": "2:2:3",
+      "selected_threshold": 0.3
+    },
+    {
+      "left_out": "real_dbt_012",
+      "selected_weights": "2:2:3",
+      "selected_threshold": 0.3
+    },
+    {
+      "left_out": "real_dbt_017",
+      "selected_weights": "2:2:3",
+      "selected_threshold": 0.3
+    },
+    {
+      "left_out": "real_dbt_018",
+      "selected_weights": "2:2:3",
+      "selected_threshold": 0.3
+    }
+  ],
+  "n_distinct_loo_selections": 2,
+  "three_member_dev_envelope": {
+    "min": 0.36488756980834114,
+    "max": 0.5818816600838885,
+    "n_configs": 21
+  }
+}

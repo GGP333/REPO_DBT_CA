@@ -1,0 +1,160 @@
+{
+  "declared": {
+    "weights": "2:2:3",
+    "threshold": 0.3,
+    "dice_mean": 0.5818816600838885,
+    "dice_sd": 0.20608315141860098,
+    "dice_ci": [
+      0.45814771700858203,
+      0.6984211465505095
+    ],
+    "n_zero_dice": 0
+  },
+  "mandatory_grid": {
+    "n_configs": 39,
+    "declared_rank": 1,
+    "best": {
+      "weights": "2:2:3",
+      "threshold": 0.3,
+      "dice_mean": 0.5818816600838885,
+      "dice_sd": 0.20608315141860098,
+      "dice_ci": [
+        0.45814771700858203,
+        0.6984211465505095
+      ],
+      "n_zero_dice": 0
+    },
+    "ci_overlap_with_best": true,
+    "top5": [
+      {
+        "weights": "2:2:3",
+        "threshold": 0.3,
+        "dice_mean": 0.5818816600838885,
+        "dice_sd": 0.20608315141860098,
+        "dice_ci": [
+          0.45814771700858203,
+          0.6984211465505095
+        ],
+        "n_zero_dice": 0
+      },
+      {
+        "weights": "1:1:2",
+        "threshold": 0.3,
+        "dice_mean": 0.5784443314554144,
+        "dice_sd": 0.2054009645136514,
+        "dice_ci": [
+          0.4555316847080042,
+          0.6948299109471187
+        ],
+        "n_zero_dice": 0
+      },
+      {
+        "weights": "1:0:1",
+        "threshold": 0.3,
+        "dice_mean": 0.5473155349337425,
+        "dice_sd": 0.18240739211443413,
+        "dice_ci": [
+          0.437481085227998,
+          0.6491352380830576
+        ],
+        "n_zero_dice": 0
+      },
+      {
+        "weights": "1:2:1",
+        "threshold": 0.6,
+        "dice_mean": 0.5428823820530624,
+        "dice_sd": 0.23490741270769805,
+        "dice_ci": [
+          0.3978748086128884,
+          0.6703484087062251
+        ],
+        "n_zero_dice": 0
+      },
+      {
+        "weights": "2:3:2",
+        "threshold": 0.6,
+        "dice_mean": 0.537212192442176,
+        "dice_sd": 0.2339569139186067,
+        "dice_ci": [
+          0.39324136361394496,
+          0.6643603083136105
+        ],
+        "n_zero_dice": 0
+      }
+    ]
+  },
+  "fine_grid": {
+    "n_configs": 931,
+    "declared_rank": 3,
+    "best": {
+      "weights": "2:1:2",
+      "threshold": 0.4,
+      "dice_mean": 0.5838753221692039,
+      "dice_sd": 0.19435029657853725,
+      "dice_ci": [
+        0.4658655038778979,
+        0.6925472943067074
+      ],
+      "n_zero_dice": 0
+    },
+    "ci_overlap_with_best": true,
+    "top5": [
+      {
+        "weights": "2:1:2",
+        "threshold": 0.4,
+        "dice_mean": 0.5838753221692039,
+        "dice_sd": 0.19435029657853725,
+        "dice_ci": [
+          0.4658655038778979,
+          0.6925472943067074
+        ],
+        "n_zero_dice": 0
+      },
+      {
+        "weights": "2:2:3",
+        "threshold": 0.35,
+        "dice_mean": 0.5820570904725519,
+        "dice_sd": 0.20259815235708098,
+        "dice_ci": [
+          0.4606739913517765,
+          0.6971315820789749
+        ],
+        "n_zero_dice": 0
+      },
+      {
+        "weights": "2:2:3",
+        "threshold": 0.3,
+        "dice_mean": 0.5818816600838885,
+        "dice_sd": 0.20608315141860098,
+        "dice_ci": [
+          0.45814771700858203,
+          0.6984211465505095
+        ],
+        "n_zero_dice": 0
+      },
+      {
+        "weights": "2:2:3",
+        "threshold": 0.4,
+        "dice_mean": 0.581142359970459,
+        "dice_sd": 0.20018126797418823,
+        "dice_ci": [
+          0.46163156493253144,
+          0.6950229713909077
+        ],
+        "n_zero_dice": 0
+      },
+      {
+        "weights": "1:1:2",
+        "threshold": 0.3,
+        "dice_mean": 0.5784443314554144,
+        "dice_sd": 0.2054009645136514,
+        "dice_ci": [
+          0.4555316847080042,
+          0.6948299109471187
+        ],
+        "n_zero_dice": 0
+      }
+    ]
+  },
+  "note": "Todos los valores provienen de predicciones out-of-fold del conjunto de desarrollo (n=10). El conjunto de test no se ha utilizado en ningun punto de este analisis."
+}
