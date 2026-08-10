@@ -1,0 +1,9 @@
+{
+  "n_cases": 10,
+  "n_ensemble_beats_best_single": 2,
+  "n_ensemble_beats_all_singles": 2,
+  "n_ensemble_worst": 0,
+  "mean_best_single": 0.56519,
+  "mean_ensemble": 0.51844,
+  "mean_spearman_between_members": 0.532395494716547
+}
