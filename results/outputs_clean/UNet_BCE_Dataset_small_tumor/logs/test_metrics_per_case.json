@@ -1,0 +1,81 @@
+{
+  "mean": {
+    "dice": 0.2634837039125462,
+    "iou": 0.19789335248060524,
+    "precision": 0.23372040316462517,
+    "recall": 0.33185643182757,
+    "f1": 0.2634833597888549,
+    "accuracy": 0.9985887209574381,
+    "hausdorff": 74.66595458984375,
+    "hausdorff_95": 39.99763202667236,
+    "fp_per_volume": 0.0006084442138671875,
+    "fp_per_image": 0.0006084442138671875,
+    "ap": 0.26550739623295766,
+    "mAP": 0.09447801113128662
+  },
+  "per_case": {
+    "dbt_001": {
+      "dice": 0.7124655246734619,
+      "iou": 0.5533564686775208,
+      "precision": 0.5990722179412842,
+      "recall": 0.878807544708252,
+      "f1": 0.7124650478363037,
+      "accuracy": 0.9989562034606934,
+      "hausdorff": 98.55962371826172,
+      "hausdorff_95": 8.58774471282959,
+      "fp_per_volume": 0.0008654594421386719,
+      "fp_per_image": 0.0008654594421386719,
+      "ap": 0.7842368483543396,
+      "mAP": 0.28343403339385986
+    },
+    "dbt_004": {
+      "dice": 0.07134894281625748,
+      "iou": 0.036994218826293945,
+      "precision": 0.052088987082242966,
+      "recall": 0.11320754885673523,
+      "f1": 0.07134851068258286,
+      "accuracy": 0.9988083839416504,
+      "hausdorff": 73.45747375488281,
+      "hausdorff_95": 66.30082702636719,
+      "fp_per_volume": 0.0008330345153808594,
+      "fp_per_image": 0.0008330345153808594,
+      "ap": 0.009794626384973526,
+      "mAP": 0.0
+    },
+    "dbt_021": {
+      "dice": 0.006636644247919321,
+      "iou": 0.0033293699380010366,
+      "precision": 0.05000000447034836,
+      "recall": 0.0035542019177228212,
+      "f1": 0.0066365208476781845,
+      "accuracy": 0.9980015754699707,
+      "hausdorff": 51.98076629638672,
+      "hausdorff_95": 45.10432434082031,
+      "fp_per_volume": 0.00012683868408203125,
+      "fp_per_image": 0.00012683868408203125,
+      "ap": 0.0024907139595597982,
+      "mAP": 0.0
+    }
+  },
+  "n_cases": 3,
+  "threshold": 0.5,
+  "checkpoint": "/home/gabriel/Escritorio/Paper_DBT/outputs_clean/UNet_BCE_Dataset_small_tumor/checkpoints/best.pt",
+  "reproduction_check": {
+    "published_dice": 0.2634837039125462,
+    "recomputed_dice": 0.2634837039125462,
+    "worst_overlap_abs_diff": 0.0,
+    "worst_overlap_metric": null,
+    "worst_detection_rel_diff": 3.902925657901476e-06,
+    "worst_detection_metric": "ap",
+    "worst_distance_abs_diff": 0.0,
+    "worst_distance_metric": null,
+    "tol_overlap_abs": 0.001,
+    "tol_detection_rel": 0.01,
+    "tol_distance_abs": 1.9998816013336183,
+    "passed_overlap": true,
+    "passed_detection": true,
+    "passed_distance": true,
+    "passed": true,
+    "note": "La coincidencia no puede ser bit a bit: la inferencia float32 sobre cuDNN no es determinista entre ejecuciones ni versiones de la libreria. Se conservan los ajustes por defecto (TF32 activado), que son los de la corrida original; forzar TF32=False aleja el resultado. Hausdorff y HD95 son discontinuas respecto de la mascara binaria y por eso llevan una tolerancia de un voxel."
+  }
+}
