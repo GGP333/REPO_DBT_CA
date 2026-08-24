@@ -1,0 +1,32 @@
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Model & Dice & IoU & Precision & Recall & 95\,\% CI (Dice) \\
+\midrule
+\multicolumn{6}{@{}l}{\textbf{(a) Synthetic datasets --- held-out synthetic test sets}} \\
+\addlinespace[2pt]
+\multicolumn{6}{@{}l}{\emph{Large tumour dataset} ($n$ = 8 test volumes)} \\
+\quad nnU-Net & \textbf{0.864 $\pm$ 0.069} & 0.766 $\pm$ 0.102 & 0.883 $\pm$ 0.123 & 0.861 $\pm$ 0.076 & [0.816, 0.904] \\
+\quad 3D U-Net (baseline) & 0.829 $\pm$ 0.088 & 0.717 $\pm$ 0.122 & 0.841 $\pm$ 0.111 & 0.846 $\pm$ 0.147 & [0.768, 0.882] \\
+\quad Attention U-Net & 0.778 $\pm$ 0.088 & 0.643 $\pm$ 0.116 & 0.766 $\pm$ 0.129 & 0.812 $\pm$ 0.114 & [0.719, 0.832] \\
+\addlinespace[2pt]
+\multicolumn{6}{@{}l}{\emph{Small tumour dataset} ($n$ = 3 test volumes)} \\
+\quad nnU-Net & \textbf{0.560 $\pm$ 0.463} & 0.476 $\pm$ 0.405 & 0.674 $\pm$ 0.223 & 0.574 $\pm$ 0.489 & [0.028, 0.872] \\
+\quad 3D U-Net (baseline) & 0.263 $\pm$ 0.390 & 0.198 $\pm$ 0.308 & 0.234 $\pm$ 0.316 & 0.332 $\pm$ 0.477 & [0.007, 0.712] \\
+\quad Attention U-Net & 0.367 $\pm$ 0.370 & 0.269 $\pm$ 0.297 & 0.305 $\pm$ 0.339 & 0.505 $\pm$ 0.443 & [0.000, 0.740] \\
+\addlinespace[2pt]
+\multicolumn{6}{@{}l}{\emph{Mixed-size tumour dataset} ($n$ = 11 test volumes)} \\
+\quad nnU-Net & \textbf{0.841 $\pm$ 0.105} & 0.737 $\pm$ 0.133 & 0.894 $\pm$ 0.070 & 0.808 $\pm$ 0.139 & [0.774, 0.887] \\
+\quad 3D U-Net (baseline) & 0.726 $\pm$ 0.238 & 0.608 $\pm$ 0.229 & 0.728 $\pm$ 0.267 & 0.738 $\pm$ 0.213 & [0.573, 0.833] \\
+\quad Attention U-Net & 0.582 $\pm$ 0.190 & 0.433 $\pm$ 0.187 & 0.604 $\pm$ 0.278 & 0.646 $\pm$ 0.143 & [0.473, 0.685] \\
+\addlinespace[2pt]
+\midrule
+\multicolumn{6}{@{}l}{\textbf{(b) Hybrid synthetic--clinical dataset --- held-out clinical cohort ($n$ = 10)}} \\
+\addlinespace[2pt]
+\quad nnU-Net & 0.353 $\pm$ 0.382 & 0.279 $\pm$ 0.310 & 0.586 $\pm$ 0.456 & 0.365 $\pm$ 0.394 & [0.132, 0.581] \\
+\quad 3D U-Net (baseline) & 0.412 $\pm$ 0.294 & 0.298 $\pm$ 0.238 & 0.542 $\pm$ 0.331 & 0.473 $\pm$ 0.350 & [0.237, 0.582] \\
+\quad Attention U-Net & \textbf{0.421 $\pm$ 0.252} & 0.294 $\pm$ 0.195 & 0.410 $\pm$ 0.277 & 0.488 $\pm$ 0.312 & [0.265, 0.560] \\
+\bottomrule
+\end{tabular}%

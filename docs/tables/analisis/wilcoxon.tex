@@ -1,0 +1,26 @@
+\small
+\begin{tabular}{lccccc c}
+\toprule
+Comparación & Dif.\ mediana & IC 95\,\% & $p$ & $p$ (Holm) & $r$ & A favor \\
+\midrule
+\multicolumn{7}{l}{\itshape Dice --- Friedman $\chi^2 = 8.27$, gl $= 3$, $p = 0.041$} \\
+Ensemble vs.\ nnU-Net & -0.005 & [-0.087, +0.053] & $0.695$ & $0.695$ & -0.16 & 5/10 \\
+Ensemble vs.\ Attention U-Net & +0.075 & [+0.027, +0.303] & $0.020$ & $0.039$$^{*}$ & +0.82 & 9/10 \\
+Ensemble vs.\ 3D U-Net & +0.103 & [+0.024, +0.281] & $0.010$ & $0.029$$^{*}$ & +0.89 & 8/10 \\
+\addlinespace
+\multicolumn{7}{l}{\itshape IoU --- Friedman $\chi^2 = 8.27$, gl $= 3$, $p = 0.041$} \\
+Ensemble vs.\ nnU-Net & -0.017 & [-0.102, +0.040] & $0.492$ & $0.492$ & -0.27 & 5/10 \\
+Ensemble vs.\ Attention U-Net & +0.062 & [+0.019, +0.282] & $0.010$ & $0.029$$^{*}$ & +0.89 & 9/10 \\
+Ensemble vs.\ 3D U-Net & +0.089 & [+0.024, +0.221] & $0.010$ & $0.029$$^{*}$ & +0.89 & 8/10 \\
+\addlinespace
+\multicolumn{7}{l}{\itshape Precision --- Friedman $\chi^2 = 4.76$, gl $= 3$, $p = 0.190$} \\
+Ensemble vs.\ nnU-Net & -0.080 & [-0.183, +0.057] & $0.322$ & $0.645$ & -0.38 & 4/10 \\
+Ensemble vs.\ Attention U-Net & +0.104 & [+0.030, +0.302] & $0.010$ & $0.029$$^{*}$ & +0.89 & 8/10 \\
+Ensemble vs.\ 3D U-Net & +0.022 & [-0.113, +0.066] & $1.000$ & $1.000$ & -0.02 & 6/10 \\
+\addlinespace
+\multicolumn{7}{l}{\itshape Recall --- Friedman $\chi^2 = 17.06$, gl $= 3$, $p = {<}\,0.001$} \\
+Ensemble vs.\ nnU-Net & +0.075 & [+0.046, +0.108] & $0.064$ & $0.129$ & +0.67 & 9/10 \\
+Ensemble vs.\ Attention U-Net & +0.026 & [-0.031, +0.098] & $0.432$ & $0.432$ & +0.31 & 7/10 \\
+Ensemble vs.\ 3D U-Net & +0.344 & [+0.099, +0.442] & $0.002$ & $0.006$$^{*}$ & +1.00 & 10/10 \\
+\bottomrule
+\end{tabular}%

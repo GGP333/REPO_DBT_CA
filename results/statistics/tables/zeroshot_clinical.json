@@ -1,0 +1,150 @@
+{
+  "threshold": 0.5,
+  "n_cases": 10,
+  "networks": {
+    "Attention U-Net": {
+      "checkpoint": "Attention_UNet_Both_best.pt",
+      "mean": {
+        "dice": 0.004971492041394294,
+        "iou": 0.002542018416685361,
+        "precision": 0.003467406232816729,
+        "recall": 0.008928379361196065,
+        "n_zero_dice": 7
+      },
+      "per_case": {
+        "real_dbt_005": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "real_dbt_006": {
+          "dice": 0.04681336021741036,
+          "iou": 0.023967684021543985,
+          "precision": 0.032910144212991495,
+          "recall": 0.08105646630236794
+        },
+        "real_dbt_007": {
+          "dice": 0.0026044275267955524,
+          "iou": 0.001303911735205617,
+          "precision": 0.0015736593632732115,
+          "recall": 0.007549361207897794
+        },
+        "real_dbt_010": {
+          "dice": 0.0002971326697370376,
+          "iou": 0.00014858841010401187,
+          "precision": 0.0001902587519025875,
+          "recall": 0.0006779661016949153
+        },
+        "real_dbt_013": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "real_dbt_014": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "real_dbt_015": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "real_dbt_016": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "real_dbt_019": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "real_dbt_020": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        }
+      }
+    },
+    "3D U-Net": {
+      "checkpoint": "UNet_BCE_Both_best.pt",
+      "mean": {
+        "dice": 0.07215481560542239,
+        "iou": 0.04410648157737242,
+        "precision": 0.5949523115801949,
+        "recall": 0.0885880131465107,
+        "n_zero_dice": 8
+      },
+      "per_case": {
+        "real_dbt_005": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "real_dbt_006": {
+          "dice": 0.3294975688816856,
+          "iou": 0.19724459105462308,
+          "precision": 0.22474021667035154,
+          "recall": 0.6171827565270188
+        },
+        "real_dbt_007": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 1.0,
+          "recall": 0.0
+        },
+        "real_dbt_010": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "real_dbt_013": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 1.0,
+          "recall": 0.0
+        },
+        "real_dbt_014": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "real_dbt_015": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 1.0,
+          "recall": 0.0
+        },
+        "real_dbt_016": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 1.0,
+          "recall": 0.0
+        },
+        "real_dbt_019": {
+          "dice": 0.3920505871725384,
+          "iou": 0.24382022471910111,
+          "precision": 0.7247828991315965,
+          "recall": 0.26869737493808815
+        },
+        "real_dbt_020": {
+          "dice": 0.0,
+          "iou": 0.0,
+          "precision": 1.0,
+          "recall": 0.0
+        }
+      }
+    }
+  }
+}

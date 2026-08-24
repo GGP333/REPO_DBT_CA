@@ -480,7 +480,89 @@ U-Net read `train_loss` from their `logs/metrics.csv` (500 epochs).
 
 ---
 
-## 9. References
+## 9. Revision: ensemble ablation and statistical analysis
+
+Material added in response to the peer review of the manuscript: the ensemble ablation, the
+statistical analysis of the clinical cohort, the recovery of per-case metrics and the zero-shot
+baseline. Every number reported below is produced by the scripts in this section.
+
+### 9.1 Ensemble ablation (development set only)
+
+The ensemble weighting scheme and decision threshold were selected exclusively from out-of-fold
+predictions on the ten clinical development cases. Configuration comparison and test evaluation live
+in separate scripts with disjoint read access, so the code that compares configurations cannot read
+the test split:
+
+```bash
+# Compares 13 weighting schemes x 3 thresholds (plus a finer 931-configuration sweep),
+# stability analysis and aggregation rules. Reads data_probs/*_OOF_dev/ only. CPU, ~11 s.
+python ensemble/ablation_weights_threshold.py --out results/ablation --seed 42
+
+# The only script with access to data_probs/*_test/. Evaluates one configuration, once.
+python ensemble/evaluate_selected_config.py --w 2 2 3 --thr 0.3
+
+python ensemble/make_ablation_figures.py     # -> results/ablation/figures/
+```
+
+The declared configuration (weights 2:2:3, threshold 0.3) ranks **1st of 39** in the mandatory grid
+(development Dice 0.582), wins 52.6 % of 1000 bootstrap resamples, and is returned by 9 of 10
+leave-one-case-out re-selections. Test performance is unchanged at Dice 0.518.
+
+### 9.2 Statistical analysis
+
+```bash
+python ensemble/statistical_analysis.py --out results/statistics --n-boot 10000 --seed 42
+python ensemble/make_statistics_figures.py   # paired per-patient plot, replaces Figure 3
+```
+
+Bootstrap CIs, median [IQR], Friedman omnibus, paired Wilcoxon signed-rank with Holm–Bonferroni
+correction, rank-biserial effect sizes and a per-case failure-mode count. On Dice the ensemble is
+significantly better than the Attention U-Net (p = 0.039) and the 3D U-Net (p = 0.029) but
+statistically comparable to the fine-tuned nnU-Net (p = 0.695); its advantage over nnU-Net is
+robustness (0/10 complete failures versus 2/10).
+
+### 9.3 Per-case metrics for the synthetic test sets
+
+The original training runs persisted only aggregate test means. Per-case metrics were recovered by
+re-inference from the surviving checkpoints — no retraining — and all eight runs reproduce the
+published means:
+
+```bash
+python src/eval_per_case_synthetic.py --ckpt-root <tree containing outputs_clean/ and outputs_improved/>
+# -> results/outputs_*/<run>/logs/test_metrics_per_case.json
+```
+
+### 9.4 Zero-shot performance on the clinical cohort
+
+The fine-tuning logs kept only the aggregate mean, so the per-case values of the synthetic-trained
+models on the clinical cases did not exist. They were recovered by re-inference from the archived
+synthetic checkpoints — no retraining — using the same padding and the same metric functions as the
+rest of the analysis, so the numbers are directly comparable with the manuscript tables:
+
+```bash
+python src/eval_zeroshot_clinical.py
+```
+
+### 9.5 Layout of the results
+
+Each results folder is split the same way: `tables/` holds the CSV and JSON outputs, `figures/`
+holds the PNG and the vector PDF of every figure. The generated LaTeX table bodies are grouped
+under `docs/tables/` in three sets — `analisis/` (the analysis tables), `detalle/` (per-case,
+zero-shot and the signed-rank workings) and `manuscrito/` (the four manuscript tables in English).
+
+All table bodies and all figures are generated from the result CSVs and JSONs. No value is typed
+by hand, so re-running the analysis updates them:
+
+```bash
+python docs/make_latex_tables.py        # table bodies, Spanish
+python docs/make_report_tables.py       # per-case, zero-shot, signed-rank detail and split tables
+python docs/make_manuscript_tables.py   # the four manuscript tables, English
+python docs/make_slide_figures.py       # primary-endpoint figure redrawn for projection
+```
+
+---
+
+## 10. References
 
 - Isensee, F., Jaeger, P. F., Kohl, S. A., Petersen, J., & Maier-Hein, K. H. (2021). nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation. *Nature Methods*, 18(2), 203-211.
 - Isensee, F., Petersen, J., Klein, A., Zimmerer, D., et al. (2018). nnU-Net: Self-adapting Framework for U-Net-Based Medical Image Segmentation. *arXiv preprint arXiv:1809.10486*.
