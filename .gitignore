@@ -90,6 +90,9 @@ docs/*.snm
 # the manuscript needs them. Written documents in PDF are not (rule above).
 !docs/figures/*.pdf
 !results/**/fig_*.pdf
+# Las tablas del manuscrito se publican tambien en PDF recortado, para poder
+# mirarlas sin compilar el manuscrito. Las emite su propio generador.
+!docs/tables/manuscrito/*.pdf
 
 # --- Kept local: training by-products and report-only material ---
 # Sample dumps and learning curves emitted during training. They are useful
