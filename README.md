@@ -482,8 +482,9 @@ U-Net read `train_loss` from their `logs/metrics.csv` (500 epochs).
 
 ## 9. Revision: ensemble ablation and statistical analysis
 
-Material added in response to the peer review of the manuscript. Full technical report (Spanish):
-**`docs/revision_ablacion_estadistica.pdf`**.
+Material added in response to the peer review of the manuscript: the ensemble ablation, the
+statistical analysis of the clinical cohort, the recovery of per-case metrics and the zero-shot
+baseline. Every number reported below is produced by the scripts in this section.
 
 ### 9.1 Ensemble ablation (development set only)
 
@@ -531,11 +532,27 @@ python src/eval_per_case_synthetic.py --ckpt-root <tree containing outputs_clean
 # -> results/outputs_*/<run>/logs/test_metrics_per_case.json
 ```
 
-### 9.4 Report
+### 9.4 Zero-shot performance on the clinical cohort
+
+The fine-tuning logs kept only the aggregate mean, so the per-case values of the synthetic-trained
+models on the clinical cases did not exist. They were recovered by re-inference from the archived
+synthetic checkpoints — no retraining — using the same padding and the same metric functions as the
+rest of the analysis, so the numbers are directly comparable with the manuscript tables:
 
 ```bash
-python docs/make_latex_tables.py             # table bodies generated from the result CSVs
-cd docs && latexmk -pdf revision_ablacion_estadistica.tex
+python src/eval_zeroshot_clinical.py
+```
+
+### 9.5 Tables and figures
+
+All LaTeX table bodies and all figures are generated from the result CSVs and JSONs. No value is
+typed by hand, so re-running the analysis updates them:
+
+```bash
+python docs/make_latex_tables.py        # table bodies, Spanish
+python docs/make_report_tables.py       # per-case, zero-shot, signed-rank detail and split tables
+python docs/make_manuscript_tables.py   # the four manuscript tables, English
+python docs/make_slide_figures.py       # primary-endpoint figure redrawn for projection
 ```
 
 ---
