@@ -68,3 +68,25 @@ data/preprocessed/
 
 # NOTE: *.png, *.log, *.txt, *.csv, *.json are intentionally NOT ignored —
 # they hold the curated metrics, training curves, sample figures and training logs.
+
+# --- Revision material ---
+# Reviewer material and written reports: kept locally only, never committed.
+# Reviewer comments, response to reviewers, manuscript patches, the Spanish
+# reports and the slide deck all live under this folder and stay off GitHub.
+revision_privada/
+Ablationstudy_test_statdistico/
+
+# LaTeX build artefacts
+docs/*.aux
+docs/*.log
+docs/*.out
+docs/*.toc
+docs/*.fls
+docs/*.fdb_latexmk
+docs/*.nav
+docs/*.snm
+
+# Figure PDFs ARE tracked: they are the vector version of the tracked PNGs and
+# the manuscript needs them. Written documents in PDF are not (rule above).
+!docs/figs/*.pdf
+!results/**/fig_*.pdf
