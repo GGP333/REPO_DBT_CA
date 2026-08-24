@@ -90,3 +90,19 @@ docs/*.snm
 # the manuscript needs them. Written documents in PDF are not (rule above).
 !docs/figures/*.pdf
 !results/**/fig_*.pdf
+
+# --- Kept local: training by-products and report-only material ---
+# Sample dumps and learning curves emitted during training. They are useful
+# locally but they are not manuscript figures, and 123 of them buried the
+# figures that matter. The paper figures under paper_assets ARE tracked.
+results/outputs_*/*/samples/
+results/outputs_*/*/logs/*.png
+results/finetuning_logs/*/*/*.png
+results/figures/
+
+# Table bodies and generators that only feed the Spanish reports, which are
+# not published here. The manuscript tables and their generator stay tracked.
+docs/tables/analisis/
+docs/tables/detalle/
+docs/make_latex_tables.py
+docs/make_report_tables.py
