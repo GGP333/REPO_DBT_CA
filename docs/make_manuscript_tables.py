@@ -9,11 +9,16 @@ numeracion del paper (Tabla 1, 2, 3, 4).
 Ningun numero se teclea a mano: todo procede de los CSV de results/, de modo
 que al reejecutar el analisis las tablas se actualizan solas.
 
-Salida: docs/tables/manuscrito/*.tex
+Salida: docs/tables/manuscrito/*.tex y, si hay pdflatex, el *.pdf de cada una
+recortado al contenido, para poder mirarlas sin compilar el manuscrito.
 
-Uso:  python docs/make_manuscript_tables.py
+Uso:  python docs/make_manuscript_tables.py [--no-pdf]
 """
+import argparse
 import os
+import shutil
+import subprocess
+import tempfile
 
 import pandas as pd
 
@@ -208,8 +213,58 @@ def table4_paired():
     write("table4_paired.tex", lines)
 
 
+# Documento minimo que envuelve un cuerpo de tabla. La clase standalone recorta
+# el PDF al contenido, asi que el resultado es la tabla sola, sin pagina alrededor.
+WRAPPER = r"""\documentclass[border=6pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\begin{document}
+\input{%s}
+\end{document}
+"""
+
+
+def to_pdf(name):
+    """Compila un cuerpo de tabla a PDF recortado. Devuelve True si lo consigue.
+
+    Se compila en un directorio temporal para no dejar los .aux y .log del
+    envoltorio junto a las tablas."""
+    src = f"{OUT}/{name}"
+    with tempfile.TemporaryDirectory() as tmp:
+        with open(f"{tmp}/wrap.tex", "w") as f:
+            f.write(WRAPPER % src)
+        r = subprocess.run(
+            ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "wrap.tex"],
+            cwd=tmp, capture_output=True, text=True)
+        if r.returncode != 0 or not os.path.exists(f"{tmp}/wrap.pdf"):
+            print(f"   aviso: no se pudo compilar {name}")
+            return False
+        dst = f"{OUT}/{name[:-4]}.pdf"
+        shutil.copy(f"{tmp}/wrap.pdf", dst)
+        print(f"-> docs/tables/manuscrito/{os.path.basename(dst)}")
+        return True
+
+
 if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--no-pdf", action="store_true",
+                    help="emitir solo los .tex, sin compilar los PDF")
+    args = ap.parse_args()
+
+    names = ["table1_synthetic.tex", "table2_test.tex",
+             "table3_ablation.tex", "table4_paired.tex"]
     table1_synthetic()
     table2_test()
     table3_ablation()
     table4_paired()
+
+    # El PDF es una comodidad, no un requisito: sin pdflatex el script sigue
+    # emitiendo los .tex, que es lo que el manuscrito necesita.
+    if args.no_pdf:
+        pass
+    elif shutil.which("pdflatex") is None:
+        print("pdflatex no encontrado: se omiten los PDF")
+    else:
+        for n in names:
+            to_pdf(n)

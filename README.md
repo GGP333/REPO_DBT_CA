@@ -557,9 +557,10 @@ examples and score comparisons — are under `results/paper_assets/`.
 Each results folder is split the same way: `tables/` holds the CSV and JSON outputs, `figures/`
 holds the PNG and the vector PDF.
 
-The four manuscript tables are in `docs/tables/manuscrito/`, ready to drop into the paper. Like
-every figure, they are generated from the result CSVs and JSONs — no value is typed by hand, so
-re-running the analysis updates them:
+The four manuscript tables are in `docs/tables/manuscrito/`, ready to drop into the paper. Each
+one is published both as the LaTeX body and as a cropped PDF, so they can be read without
+compiling anything. Like every figure, they are generated from the result CSVs and JSONs — no
+value is typed by hand, so re-running the analysis updates them:
 
 ```bash
 python docs/make_manuscript_tables.py   # the four manuscript tables, English
