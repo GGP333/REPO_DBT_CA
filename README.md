@@ -501,7 +501,7 @@ python ensemble/ablation_weights_threshold.py --out results/ablation --seed 42
 # The only script with access to data_probs/*_test/. Evaluates one configuration, once.
 python ensemble/evaluate_selected_config.py --w 2 2 3 --thr 0.3
 
-python ensemble/make_ablation_figures.py     # -> results/ablation/fig_ablation_dev.{png,pdf}
+python ensemble/make_ablation_figures.py     # -> results/ablation/figures/
 ```
 
 The declared configuration (weights 2:2:3, threshold 0.3) ranks **1st of 39** in the mandatory grid
@@ -543,10 +543,15 @@ rest of the analysis, so the numbers are directly comparable with the manuscript
 python src/eval_zeroshot_clinical.py
 ```
 
-### 9.5 Tables and figures
+### 9.5 Layout of the results
 
-All LaTeX table bodies and all figures are generated from the result CSVs and JSONs. No value is
-typed by hand, so re-running the analysis updates them:
+Each results folder is split the same way: `tables/` holds the CSV and JSON outputs, `figures/`
+holds the PNG and the vector PDF of every figure. The generated LaTeX table bodies are grouped
+under `docs/tables/` in three sets — `analisis/` (the analysis tables), `detalle/` (per-case,
+zero-shot and the signed-rank workings) and `manuscrito/` (the four manuscript tables in English).
+
+All table bodies and all figures are generated from the result CSVs and JSONs. No value is typed
+by hand, so re-running the analysis updates them:
 
 ```bash
 python docs/make_latex_tables.py        # table bodies, Spanish

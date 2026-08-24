@@ -226,7 +226,8 @@ def main():
     ap.add_argument("--n-boot", type=int, default=10000)
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()
-    os.makedirs(args.out, exist_ok=True)
+    tables = f"{args.out}/tables"
+    os.makedirs(tables, exist_ok=True)
 
     df = pd.read_csv(f"{REPO}/{args.scores}")
     print(f"Cohorte clinica de test: {df.case.nunique()} casos x "
@@ -234,25 +235,25 @@ def main():
 
     print("B1  descriptivos...")
     desc = b1_descriptive(df, args)
-    desc.to_csv(f"{args.out}/descriptive_test.csv", index=False)
+    desc.to_csv(f"{tables}/descriptive_test.csv", index=False)
 
     print("B2  Friedman + Wilcoxon con correccion de Holm...")
     fried, wilc = b2_paired(df, args)
-    fried.to_csv(f"{args.out}/friedman_omnibus.csv", index=False)
-    wilc.to_csv(f"{args.out}/wilcoxon_pairwise.csv", index=False)
+    fried.to_csv(f"{tables}/friedman_omnibus.csv", index=False)
+    wilc.to_csv(f"{tables}/wilcoxon_pairwise.csv", index=False)
 
     print("B3  descriptivos de los datasets sinteticos e hibrido...")
     syn = b3_synthetic(args)
-    syn.to_csv(f"{args.out}/synthetic_descriptive.csv", index=False)
+    syn.to_csv(f"{tables}/synthetic_descriptive.csv", index=False)
 
     print("B4  complementariedad y modos de fallo...")
     corr, comp, fail = b4_complementarity(df, args)
-    corr.to_csv(f"{args.out}/complementarity_spearman.csv", index=False)
-    fail.to_csv(f"{args.out}/failure_modes_test.csv", index=False)
-    with open(f"{args.out}/complementarity_summary.json", "w") as f:
+    corr.to_csv(f"{tables}/complementarity_spearman.csv", index=False)
+    fail.to_csv(f"{tables}/failure_modes_test.csv", index=False)
+    with open(f"{tables}/complementarity_summary.json", "w") as f:
         json.dump(comp, f, indent=2)
 
-    with open(f"{args.out}/analysis_config.json", "w") as f:
+    with open(f"{tables}/analysis_config.json", "w") as f:
         json.dump(dict(n_bootstrap=args.n_boot, seed=args.seed,
                        primary_endpoint=PRIMARY,
                        multiplicity="Holm-Bonferroni over the three "

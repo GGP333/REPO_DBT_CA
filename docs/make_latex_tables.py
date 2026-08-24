@@ -3,7 +3,7 @@ Genera los cuerpos de tabla LaTeX del informe de revision a partir de los CSV.
 
 Ningun numero del documento se teclea a mano: cada tabla se emite aqui desde el
 artefacto que la produjo, de modo que al reejecutar el analisis el PDF se
-actualiza solo. Salida en docs/tables/*.tex, incluida con \\input{}.
+actualiza solo. Salida en docs/tables/analisis/*.tex, incluida con \\input{}.
 
 Uso:  python docs/make_latex_tables.py
 """
@@ -13,7 +13,7 @@ import os
 import pandas as pd
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = f"{REPO}/docs/tables"
+OUT = f"{REPO}/docs/tables/analisis"
 os.makedirs(OUT, exist_ok=True)
 
 MODEL_ES = {"nnU-Net": "nnU-Net", "Attention": "Attention U-Net",
@@ -40,7 +40,7 @@ def w(name, body):
     """Escribe un fragmento tal cual (macros)."""
     with open(f"{OUT}/{name}", "w") as f:
         f.write(body.rstrip("\n") + "%\n")
-    print(f"-> docs/tables/{name}")
+    print(f"-> docs/tables/analisis/{name}")
 
 
 def w_table(name, colspec, header, rows, size="\\small"):
@@ -65,7 +65,7 @@ def esc(s):
 # ---------------------------------------------------------------------------
 def table_ablation():
     """Tabla 3: rejilla obligatoria de ablacion, solo desarrollo."""
-    d = pd.read_csv(f"{REPO}/results/ablation/table3_ensemble_ablation_dev.csv")
+    d = pd.read_csv(f"{REPO}/results/ablation/tables/table3_ensemble_ablation_dev.csv")
     lines, prev = [], None
     for _, r in d.iterrows():
         cat = CAT_ES[r["category"]]
@@ -90,8 +90,8 @@ def table_ablation():
 
 def table_stability():
     """Estabilidad de la seleccion: bootstrap y leave-one-out."""
-    r = json.load(open(f"{REPO}/results/ablation/ablation_stability_dev.json"))
-    d = pd.read_csv(f"{REPO}/results/ablation/ablation_stability_dev.csv")
+    r = json.load(open(f"{REPO}/results/ablation/tables/ablation_stability_dev.json"))
+    d = pd.read_csv(f"{REPO}/results/ablation/tables/ablation_stability_dev.csv")
     lines = []
     for _, x in d[d.bootstrap_win_frac > 0].head(6).iterrows():
         sel = x["weights"] == "2:2:3" and abs(x["threshold"] - 0.3) < 1e-9
@@ -115,7 +115,7 @@ def table_stability():
         f"\\newcommand{{\\envMax}}{{{r['three_member_dev_envelope']['max']:.3f}}}",
         f"\\newcommand{{\\envN}}{{{r['three_member_dev_envelope']['n_configs']}}}",
     ]
-    rank = json.load(open(f"{REPO}/results/ablation/ablation_ranking_check.json"))
+    rank = json.load(open(f"{REPO}/results/ablation/tables/ablation_ranking_check.json"))
     macros += [
         f"\\newcommand{{\\rankMand}}{{{rank['mandatory_grid']['declared_rank']}}}",
         f"\\newcommand{{\\nMand}}{{{rank['mandatory_grid']['n_configs']}}}",
@@ -130,7 +130,7 @@ def table_stability():
 
 
 def table_aggregation():
-    d = pd.read_csv(f"{REPO}/results/ablation/ablation_aggregation_dev.csv")
+    d = pd.read_csv(f"{REPO}/results/ablation/tables/ablation_aggregation_dev.csv")
     es = {"Weighted mean (2:2:3)": "Promedio ponderado (2:2:3)",
           "Unweighted mean (1:1:1)": "Promedio no ponderado (1:1:1)",
           "Logit (log-odds) mean": "Promedio de \\emph{logits}",
@@ -153,7 +153,7 @@ def table_aggregation():
 
 def table_descriptive():
     """Tabla 2 revisada: descriptivos de la cohorte clinica de test."""
-    d = pd.read_csv(f"{REPO}/results/statistics/descriptive_test.csv")
+    d = pd.read_csv(f"{REPO}/results/statistics/tables/descriptive_test.csv")
     lines, prev = [], None
     for _, r in d.iterrows():
         m = MODEL_ES[r["method"]]
@@ -183,8 +183,8 @@ def fmt_p_tex(p):
 
 def table_wilcoxon():
     """Tabla 4: comparaciones pareadas."""
-    d = pd.read_csv(f"{REPO}/results/statistics/wilcoxon_pairwise.csv")
-    f = pd.read_csv(f"{REPO}/results/statistics/friedman_omnibus.csv")
+    d = pd.read_csv(f"{REPO}/results/statistics/tables/wilcoxon_pairwise.csv")
+    f = pd.read_csv(f"{REPO}/results/statistics/tables/friedman_omnibus.csv")
     lines, prev = [], None
     for _, r in d.iterrows():
         if r["metric"] != prev:
@@ -214,7 +214,7 @@ def table_wilcoxon():
 
 def table_synthetic():
     """Tabla 1 ampliada con dispersion e IC."""
-    d = pd.read_csv(f"{REPO}/results/statistics/synthetic_descriptive.csv")
+    d = pd.read_csv(f"{REPO}/results/statistics/tables/synthetic_descriptive.csv")
     order_ds = ["large_tumor", "small_tumor", "Mixed_Size", "Hybrid"]
     order_m = ["nnU-Net", "3D U-Net", "Attention U-Net"]
     lines = []
@@ -239,7 +239,7 @@ def table_synthetic():
 
 
 def table_failures():
-    d = pd.read_csv(f"{REPO}/results/statistics/failure_modes_test.csv")
+    d = pd.read_csv(f"{REPO}/results/statistics/tables/failure_modes_test.csv")
     lines = []
     for _, r in d.iterrows():
         lines.append(" & ".join([
@@ -281,8 +281,8 @@ def table_reproduction():
 
 def macros_stats():
     """Cifras sueltas que el texto cita, para no teclearlas."""
-    comp = json.load(open(f"{REPO}/results/statistics/complementarity_summary.json"))
-    sel = json.load(open(f"{REPO}/results/ablation/selected_config_test.json"))
+    comp = json.load(open(f"{REPO}/results/statistics/tables/complementarity_summary.json"))
+    sel = json.load(open(f"{REPO}/results/ablation/tables/selected_config_test.json"))
     m = [
         f"\\newcommand{{\\meanRho}}{{{comp['mean_spearman_between_members']:.3f}}}",
         f"\\newcommand{{\\nBeatsBest}}{{{comp['n_ensemble_beats_best_single']}}}",

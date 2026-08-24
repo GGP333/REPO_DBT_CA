@@ -144,7 +144,8 @@ def main():
     ap.add_argument("--n-boot", type=int, default=10000)
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()
-    os.makedirs(args.out, exist_ok=True)
+    tables = f"{args.out}/tables"
+    os.makedirs(tables, exist_ok=True)
 
     print(f"Cargando probabilidades OOF de desarrollo ({len(DEV)} casos)...")
     probs, masks = load_split(SPLIT)
@@ -171,7 +172,7 @@ def main():
                               key=lambda kv: -kv[1]["dice_mean"]):
         fine_rows.append(dict(weights=fmt_weights(w), threshold=thr,
                               n_members=sum(1 for x in w if x > 0), **s))
-    _write_csv(f"{args.out}/ablation_grid_dev.csv", fine_rows, args.seed)
+    _write_csv(f"{tables}/ablation_grid_dev.csv", fine_rows, args.seed)
     print(f"  -> ablation_grid_dev.csv ({len(fine_rows)} filas)")
 
     # --- A1: rejilla obligatoria ----------------------------------------
@@ -182,29 +183,29 @@ def main():
             mand_rows.append(dict(
                 configuration=label, category=cat, weights=fmt_weights(w),
                 threshold=thr, **summaries[(w, thr)]))
-    _write_csv(f"{args.out}/table3_ensemble_ablation_dev.csv", mand_rows, args.seed)
+    _write_csv(f"{tables}/table3_ensemble_ablation_dev.csv", mand_rows, args.seed)
     print(f"  -> table3_ensemble_ablation_dev.csv ({len(mand_rows)} filas)")
 
     # --- A3: ranking de la configuracion declarada ----------------------
     declared_key = (DECLARED_WEIGHTS, DECLARED_THR)
     ranking = _ranking_report(summaries, mand_rows, declared_key, args)
-    with open(f"{args.out}/ablation_ranking_check.json", "w") as f:
+    with open(f"{tables}/ablation_ranking_check.json", "w") as f:
         json.dump(ranking, f, indent=2)
     print(f"  -> ablation_ranking_check.json")
 
     # --- A4: estabilidad de la seleccion --------------------------------
     print("A4: estabilidad de la seleccion (bootstrap + leave-one-out)...")
     stability = _stability(results, summaries, args)
-    _write_csv(f"{args.out}/ablation_stability_dev.csv",
+    _write_csv(f"{tables}/ablation_stability_dev.csv",
                stability["rows"], args.seed)
-    with open(f"{args.out}/ablation_stability_dev.json", "w") as f:
+    with open(f"{tables}/ablation_stability_dev.json", "w") as f:
         json.dump(stability["report"], f, indent=2)
     print(f"  -> ablation_stability_dev.csv / .json")
 
     # --- A5: reglas de agregacion alternativas --------------------------
     print("A5: reglas de agregacion alternativas...")
     agg_rows = _aggregation_rules(probs, masks, all_thr, args)
-    _write_csv(f"{args.out}/ablation_aggregation_dev.csv", agg_rows, args.seed)
+    _write_csv(f"{tables}/ablation_aggregation_dev.csv", agg_rows, args.seed)
     print(f"  -> ablation_aggregation_dev.csv ({len(agg_rows)} filas)")
 
     _print_summary(ranking, mand_rows)

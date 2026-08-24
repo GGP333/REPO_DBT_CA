@@ -12,7 +12,7 @@ import numpy as np
 from scipy import stats
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = f"{REPO}/docs/tables_detalle"
+OUT = f"{REPO}/docs/tables/detalle"
 os.makedirs(OUT, exist_ok=True)
 
 METHODS = ["nnU-Net", "Attention", "U-Net BCE", "Ensemble"]
@@ -161,7 +161,7 @@ def t_alternativas():
 
 # --------------------------------------- rejilla por categoria (5 categorias)
 def t_categorias():
-    rows = list(csv.DictReader(open(f"{REPO}/results/ablation/"
+    rows = list(csv.DictReader(open(f"{REPO}/results/ablation/tables/"
                                     "table3_ensemble_ablation_dev.csv")))
     nice = {"single-model": "Modelo individual", "pairwise": "Por pares",
             "equal": "Pesos iguales", "alternative": "Alternativas",
@@ -181,7 +181,7 @@ def t_categorias():
 
 # ------------------------------------ reglas de agregacion, con ceros
 def t_reglas():
-    rows = list(csv.DictReader(open(f"{REPO}/results/ablation/"
+    rows = list(csv.DictReader(open(f"{REPO}/results/ablation/tables/"
                                     "ablation_aggregation_dev.csv")))
     nice = {"Weighted mean (2:2:3)": "Media ponderada (2:2:3)",
             "Logit (log-odds) mean": "Media de log-odds",
@@ -230,7 +230,7 @@ def t_hybrid():
 
 # ------------------------------------------- zero-shot sobre cohorte clinica
 def t_zeroshot():
-    d = json.load(open(f"{REPO}/results/statistics/zeroshot_clinical.json"))
+    d = json.load(open(f"{REPO}/results/statistics/tables/zeroshot_clinical.json"))
     nets = list(d["networks"])
     cases = list(d["networks"][nets[0]]["per_case"])
     b = ["\\begin{tabular}{lrr}", "\\toprule",

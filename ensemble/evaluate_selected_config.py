@@ -34,7 +34,8 @@ def main():
     ap.add_argument("--n-boot", type=int, default=10000)
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()
-    os.makedirs(args.out, exist_ok=True)
+    tables = f"{args.out}/tables"
+    os.makedirs(tables, exist_ok=True)
 
     weights = tuple(args.w)
     print(f"Configuracion seleccionada en desarrollo: "
@@ -82,7 +83,7 @@ def main():
         n_zero_dice=n_zero,
         bootstrap=dict(n_resamples=args.n_boot, seed=args.seed),
     )
-    path = f"{args.out}/selected_config_test.json"
+    path = f"{tables}/selected_config_test.json"
     with open(path, "w") as f:
         json.dump(record, f, indent=2)
     print(f"\n-> {path}")

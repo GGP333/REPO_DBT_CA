@@ -85,7 +85,9 @@ def main():
         print(f"{name:<16} Dice medio = {agg['dice']:.4f}  "
               f"ceros = {agg['n_zero_dice']}/{len(TEST)}", flush=True)
 
-    dst = f"{REPO}/results/statistics/zeroshot_clinical.json"
+    out_dir = f"{REPO}/results/statistics/tables"
+    os.makedirs(out_dir, exist_ok=True)
+    dst = f"{out_dir}/zeroshot_clinical.json"
     with open(dst, "w") as f:
         json.dump(out, f, indent=2)
     print(f"-> {dst}")

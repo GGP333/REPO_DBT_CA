@@ -101,7 +101,7 @@ def main():
     style()
 
     df = pd.read_csv(args.scores)
-    wilc = pd.read_csv(f"{args.stats}/wilcoxon_pairwise.csv")
+    wilc = pd.read_csv(f"{args.stats}/tables/wilcoxon_pairwise.csv")
 
     fig, axes = plt.subplots(1, 4, figsize=(15.5, 4.3))
     for ax, metric in zip(axes, METRICS):
@@ -117,9 +117,10 @@ def main():
         y=1.005, fontsize=8.5, color=INK_2)
     fig.tight_layout(rect=[0, 0, 1, 0.94])
 
-    os.makedirs(args.out, exist_ok=True)
+    figures = f"{args.out}/figures"
+    os.makedirs(figures, exist_ok=True)
     for ext in ("png", "pdf"):
-        p = f"{args.out}/fig_paired_test_metrics.{ext}"
+        p = f"{figures}/fig_paired_test_metrics.{ext}"
         fig.savefig(p, dpi=300, bbox_inches="tight")
         print(f"-> {p}")
 

@@ -1,7 +1,7 @@
 """
 Figuras redibujadas para proyeccion (presentacion de la revision).
 
-La figura del paper (results/statistics/fig_paired_test_metrics.pdf) pone los
+La figura del paper (results/statistics/figures/fig_paired_test_metrics.pdf) pone los
 cuatro endpoints en una fila: relacion de aspecto 3.5:1. A ancho de diapositiva
 16:9 eso deja las etiquetas en ~3.4 pt, ilegibles en pantalla.
 
@@ -26,8 +26,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "ensemble"))
 from make_statistics_figures import COLORS, METHODS, INK, INK_2, GRID, LINE
 
 SCORES = "results/paper_assets/scores/scores_per_case_test.csv"
-STATS = "results/statistics/wilcoxon_pairwise.csv"
-OUT = "docs/figs"
+STATS = "results/statistics/tables/wilcoxon_pairwise.csv"
+OUT = "docs/figures"
 
 
 def style():

@@ -1,6 +1,7 @@
 # Análisis estadístico de la cohorte clínica
 
 Salidas de `ensemble/statistical_analysis.py` sobre los 10 casos clínicos de test.
+Las tablas están en `tables/` y las figuras, en PNG y PDF vectorial, en `figures/`.
 
 | Archivo | Contenido |
 |---|---|
@@ -11,6 +12,7 @@ Salidas de `ensemble/statistical_analysis.py` sobre los 10 casos clínicos de te
 | `complementarity_spearman.csv` | Correlación de Spearman entre los Dice por caso de los tres miembros |
 | `complementarity_summary.json` | Resumen de complementariedad — **leer la nota de abajo** |
 | `synthetic_descriptive.csv` | Descriptivos por caso de las ocho ejecuciones sintéticas |
+| `zeroshot_clinical.json` | Rendimiento zero-shot de los modelos sintéticos sobre la cohorte clínica, por caso |
 | `analysis_config.json` | Semilla, número de remuestreos, convención de DE, criterio de multiplicidad |
 
 ## Nota sobre `complementarity_summary.json`

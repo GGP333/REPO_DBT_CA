@@ -9,7 +9,7 @@ numeracion del paper (Tabla 1, 2, 3, 4).
 Ningun numero se teclea a mano: todo procede de los CSV de results/, de modo
 que al reejecutar el analisis las tablas se actualizan solas.
 
-Salida: docs/tables_manuscrito/*.tex
+Salida: docs/tables/manuscrito/*.tex
 
 Uso:  python docs/make_manuscript_tables.py
 """
@@ -18,7 +18,7 @@ import os
 import pandas as pd
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = f"{REPO}/docs/tables_manuscrito"
+OUT = f"{REPO}/docs/tables/manuscrito"
 os.makedirs(OUT, exist_ok=True)
 
 # Etiquetas del manuscrito. El CSV usa el nombre interno del modelo.
@@ -38,7 +38,7 @@ ORDER_MODELS = ["nnU-Net", "3D U-Net (baseline)", "Attention U-Net"]
 def write(name, lines):
     with open(f"{OUT}/{name}", "w") as f:
         f.write("\n".join(lines).rstrip("\n") + "%\n")
-    print(f"-> docs/tables_manuscrito/{name}")
+    print(f"-> docs/tables/manuscrito/{name}")
 
 
 def pm(mean, sd):
@@ -66,7 +66,7 @@ def table1_synthetic():
     pasa a ser una fila de cabecera que ocupa el ancho completo, con lo que
     ninguna celda necesita partirse.
     """
-    d = pd.read_csv(f"{REPO}/results/statistics/synthetic_descriptive.csv")
+    d = pd.read_csv(f"{REPO}/results/statistics/tables/synthetic_descriptive.csv")
     d["model"] = d["model"].map(lambda m: MODEL_EN.get(m, m))
     wide = d.pivot_table(index=["dataset", "model"], columns="metric",
                          values=["mean", "sd", "n", "ci95_lo", "ci95_hi"],
@@ -118,7 +118,7 @@ def table1_synthetic():
 # ---------------------------------------------------------------------------
 def table2_test():
     """Tabla 2 revisada: cohorte clinica de prueba, con dispersion e IC."""
-    d = pd.read_csv(f"{REPO}/results/statistics/descriptive_test.csv")
+    d = pd.read_csv(f"{REPO}/results/statistics/tables/descriptive_test.csv")
     lines = ["\\small",
              "\\setlength{\\tabcolsep}{5pt}",
              "\\begin{tabular}{@{}llcccc@{}}",
@@ -143,7 +143,7 @@ def table2_test():
 # ---------------------------------------------------------------------------
 def table3_ablation():
     """Tabla 3 (nueva): rejilla obligatoria de ablacion, solo desarrollo."""
-    d = pd.read_csv(f"{REPO}/results/ablation/table3_ensemble_ablation_dev.csv")
+    d = pd.read_csv(f"{REPO}/results/ablation/tables/table3_ensemble_ablation_dev.csv")
     lines = ["\\footnotesize",
              "\\setlength{\\tabcolsep}{4pt}",
              "\\begin{tabular}{@{}llcccccc c@{}}",
@@ -178,8 +178,8 @@ def table3_ablation():
 # ---------------------------------------------------------------------------
 def table4_paired():
     """Tabla 4 (nueva): contrastes pareados sobre la cohorte de prueba."""
-    w = pd.read_csv(f"{REPO}/results/statistics/wilcoxon_pairwise.csv")
-    fr = pd.read_csv(f"{REPO}/results/statistics/friedman_omnibus.csv").set_index("metric")
+    w = pd.read_csv(f"{REPO}/results/statistics/tables/wilcoxon_pairwise.csv")
+    fr = pd.read_csv(f"{REPO}/results/statistics/tables/friedman_omnibus.csv").set_index("metric")
     lines = ["\\small",
              "\\setlength{\\tabcolsep}{5pt}",
              "\\begin{tabular}{@{}lccccc c@{}}",

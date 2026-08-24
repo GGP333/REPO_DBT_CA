@@ -88,5 +88,5 @@ docs/*.snm
 
 # Figure PDFs ARE tracked: they are the vector version of the tracked PNGs and
 # the manuscript needs them. Written documents in PDF are not (rule above).
-!docs/figs/*.pdf
+!docs/figures/*.pdf
 !results/**/fig_*.pdf

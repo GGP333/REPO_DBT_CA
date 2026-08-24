@@ -12,7 +12,7 @@ Tres paneles, TODOS con metricas del conjunto de desarrollo (out-of-fold):
   (c) Ablacion de miembros: modelos individuales, pares y el ensemble de tres,
       cada uno en su mejor umbral de desarrollo, con IC 95 % bootstrap.
 
-Lee unicamente los CSV de results/ablation/ (que a su vez provienen solo de
+Lee unicamente los CSV de results/ablation/tables/ (que a su vez provienen solo de
 predicciones de desarrollo). No accede a las probabilidades de test.
 
 Uso:  python ensemble/make_ablation_figures.py
@@ -180,7 +180,10 @@ def main():
     args = ap.parse_args()
     style()
 
-    grid = pd.read_csv(f"{args.ablation}/ablation_grid_dev.csv")
+    figures = f"{args.ablation}/figures"
+    os.makedirs(figures, exist_ok=True)
+
+    grid = pd.read_csv(f"{args.ablation}/tables/ablation_grid_dev.csv")
     grid = grid[grid.weights.isin(LABELS)]
 
     fig = plt.figure(figsize=(16.5, 4.8))
@@ -197,7 +200,7 @@ def main():
         y=0.975, fontsize=8.5, color=INK_2)
 
     for ext in ("png", "pdf"):
-        p = f"{args.ablation}/fig_ablation_dev.{ext}"
+        p = f"{figures}/fig_ablation_dev.{ext}"
         fig.savefig(p, dpi=300, bbox_inches="tight")
         print(f"-> {p}")
 
